@@ -1,0 +1,775 @@
+import type { UnifiedProduct } from './providers/types';
+import { calculateProfitSuggestion } from './providers/types';
+
+/**
+ * Product Index Entry (internal format)
+ */
+export interface ProductIndexEntry {
+    id: string;
+    title: string;
+    category: string;
+    subcategory?: string;
+    imageUrl: string;
+    price: number;
+    currency: string;
+    rating: number;
+    reviewsCount: number;
+    provider: 'aliexpress' | 'cj';
+    productUrl: string;
+    shippingDays: number;
+    popularityScore: number;
+    tags: string[];
+}
+
+/**
+ * Embedded Product Data
+ * Used to avoid filesystem/bundling issues in Next.js API routes
+ */
+const PRODUCTS_DATA: ProductIndexEntry[] = [
+    {
+        "id": "pet_001",
+        "title": "Orthopedic Memory Foam Dog Bed - Large",
+        "category": "Pets",
+        "subcategory": "Dog Beds",
+        "imageUrl": "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=600&q=80",
+        "price": 15.99,
+        "currency": "USD",
+        "rating": 4.7,
+        "reviewsCount": 2847,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005003456789012.html",
+        "shippingDays": 7,
+        "popularityScore": 92,
+        "tags": ["trending", "best-seller", "high-margin", "dog", "bed"]
+    },
+    {
+        "id": "pet_002",
+        "title": "Automatic Pet Feeder with Timer & Voice Recorder",
+        "category": "Pets",
+        "subcategory": "Feeders",
+        "imageUrl": "https://images.unsplash.com/photo-1535930749574-1399327ce78f?auto=format&fit=crop&w=600&q=80",
+        "price": 24.50,
+        "currency": "USD",
+        "rating": 4.6,
+        "reviewsCount": 1523,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/1234567890",
+        "shippingDays": 5,
+        "popularityScore": 88,
+        "tags": ["smart", "automatic", "cat", "dog", "feeder"]
+    },
+    {
+        "id": "pet_003",
+        "title": "Interactive Laser Cat Toy - Automatic",
+        "category": "Pets",
+        "subcategory": "Cat Toys",
+        "imageUrl": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80",
+        "price": 12.99,
+        "currency": "USD",
+        "rating": 4.5,
+        "reviewsCount": 3421,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005004567890123.html",
+        "shippingDays": 8,
+        "popularityScore": 85,
+        "tags": ["cat", "toy", "laser", "interactive"]
+    },
+    {
+        "id": "pet_004",
+        "title": "GPS Pet Tracker Collar - Waterproof",
+        "category": "Pets",
+        "subcategory": "Collars & Trackers",
+        "imageUrl": "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80",
+        "price": 29.99,
+        "currency": "USD",
+        "rating": 4.8,
+        "reviewsCount": 987,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/2345678901",
+        "shippingDays": 6,
+        "popularityScore": 90,
+        "tags": ["gps", "tracker", "collar", "smart", "safety"]
+    },
+    {
+        "id": "pet_005",
+        "title": "Calming Donut Bed for Anxious Dogs",
+        "category": "Pets",
+        "subcategory": "Dog Beds",
+        "imageUrl": "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=600&q=80",
+        "price": 18.75,
+        "currency": "USD",
+        "rating": 4.9,
+        "reviewsCount": 4532,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005005678901234.html",
+        "shippingDays": 7,
+        "popularityScore": 95,
+        "tags": ["calming", "anxiety", "dog", "bed", "viral"]
+    },
+    {
+        "id": "tech_001",
+        "title": "Wireless Noise Cancelling Headphones - Bluetooth 5.0",
+        "category": "Tech",
+        "subcategory": "Audio",
+        "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80",
+        "price": 22.99,
+        "currency": "USD",
+        "rating": 4.6,
+        "reviewsCount": 5234,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005006789012345.html",
+        "shippingDays": 9,
+        "popularityScore": 89,
+        "tags": ["headphones", "wireless", "bluetooth", "noise-cancelling"]
+    },
+    {
+        "id": "tech_002",
+        "title": "RGB Mechanical Gaming Keyboard - Hot Swappable",
+        "category": "Tech",
+        "subcategory": "Gaming Peripherals",
+        "imageUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
+        "price": 35.50,
+        "currency": "USD",
+        "rating": 4.7,
+        "reviewsCount": 2156,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/3456789012",
+        "shippingDays": 6,
+        "popularityScore": 91,
+        "tags": ["keyboard", "gaming", "rgb", "mechanical"]
+    },
+    {
+        "id": "tech_003",
+        "title": "Fast Charging Power Bank 20000mAh - Dual USB",
+        "category": "Tech",
+        "subcategory": "Phone Accessories",
+        "imageUrl": "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?auto=format&fit=crop&w=600&q=80",
+        "price": 16.99,
+        "currency": "USD",
+        "rating": 4.5,
+        "reviewsCount": 6789,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005007890123456.html",
+        "shippingDays": 8,
+        "popularityScore": 87,
+        "tags": ["power-bank", "charger", "portable", "fast-charging"]
+    },
+    {
+        "id": "tech_004",
+        "title": "Wireless Gaming Mouse - 16000 DPI RGB",
+        "category": "Tech",
+        "subcategory": "Gaming Peripherals",
+        "imageUrl": "https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=600&q=80",
+        "price": 19.99,
+        "currency": "USD",
+        "rating": 4.6,
+        "reviewsCount": 3421,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/4567890123",
+        "shippingDays": 7,
+        "popularityScore": 88,
+        "tags": ["mouse", "gaming", "wireless", "rgb"]
+    },
+    {
+        "id": "tech_005",
+        "title": "Smart Ring Health Tracker - Heart Rate & Sleep Monitor",
+        "category": "Tech",
+        "subcategory": "Wearables",
+        "imageUrl": "https://images.unsplash.com/photo-1544117519-31a4b719223d?auto=format&fit=crop&w=600&q=80",
+        "price": 28.50,
+        "currency": "USD",
+        "rating": 4.4,
+        "reviewsCount": 1234,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005008901234567.html",
+        "shippingDays": 10,
+        "popularityScore": 83,
+        "tags": ["smart-ring", "health", "fitness", "tracker"]
+    },
+    {
+        "id": "fitness_001",
+        "title": "Adjustable Dumbbell Set 5-52lbs - Space Saving",
+        "category": "Fitness",
+        "subcategory": "Weights",
+        "imageUrl": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=600&q=80",
+        "price": 45.99,
+        "currency": "USD",
+        "rating": 4.8,
+        "reviewsCount": 1876,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/5678901234",
+        "shippingDays": 8,
+        "popularityScore": 94,
+        "tags": ["dumbbells", "weights", "adjustable", "home-gym"]
+    },
+    {
+        "id": "fitness_002",
+        "title": "Extra Thick Yoga Mat - Non-Slip 15mm",
+        "category": "Fitness",
+        "subcategory": "Yoga",
+        "imageUrl": "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?auto=format&fit=crop&w=600&q=80",
+        "price": 14.99,
+        "currency": "USD",
+        "rating": 4.7,
+        "reviewsCount": 4321,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005009012345678.html",
+        "shippingDays": 7,
+        "popularityScore": 90,
+        "tags": ["yoga", "mat", "exercise", "non-slip"]
+    },
+    {
+        "id": "fitness_003",
+        "title": "Resistance Bands Set - 5 Levels with Handles",
+        "category": "Fitness",
+        "subcategory": "Resistance Training",
+        "imageUrl": "https://images.unsplash.com/photo-1598289431512-b97b0917affc?auto=format&fit=crop&w=600&q=80",
+        "price": 11.99,
+        "currency": "USD",
+        "rating": 4.6,
+        "reviewsCount": 5678,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005010123456789.html",
+        "shippingDays": 6,
+        "popularityScore": 88,
+        "tags": ["resistance-bands", "workout", "portable", "home-gym"]
+    },
+    {
+        "id": "fitness_004",
+        "title": "Ab Roller Wheel Kit with Knee Pad",
+        "category": "Fitness",
+        "subcategory": "Core Training",
+        "imageUrl": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=600&q=80",
+        "price": 9.99,
+        "currency": "USD",
+        "rating": 4.5,
+        "reviewsCount": 2987,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/6789012345",
+        "shippingDays": 7,
+        "popularityScore": 85,
+        "tags": ["ab-roller", "core", "workout", "abs"]
+    },
+    {
+        "id": "fitness_005",
+        "title": "Digital Jump Rope with Counter - Cordless",
+        "category": "Fitness",
+        "subcategory": "Cardio",
+        "imageUrl": "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&w=600&q=80",
+        "price": 13.50,
+        "currency": "USD",
+        "rating": 4.4,
+        "reviewsCount": 1543,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005011234567890.html",
+        "shippingDays": 9,
+        "popularityScore": 82,
+        "tags": ["jump-rope", "cardio", "digital", "counter"]
+    },
+    {
+        "id": "fashion_001",
+        "title": "Oversized Streetwear Hoodie - Vintage Wash",
+        "category": "Fashion",
+        "subcategory": "Hoodies",
+        "imageUrl": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80",
+        "price": 18.99,
+        "currency": "USD",
+        "rating": 4.6,
+        "reviewsCount": 3456,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005012345678901.html",
+        "shippingDays": 10,
+        "popularityScore": 89,
+        "tags": ["hoodie", "streetwear", "oversized", "vintage"]
+    },
+    {
+        "id": "fashion_002",
+        "title": "Polarized Retro Sunglasses - UV400 Protection",
+        "category": "Fashion",
+        "subcategory": "Accessories",
+        "imageUrl": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80",
+        "price": 8.99,
+        "currency": "USD",
+        "rating": 4.5,
+        "reviewsCount": 6789,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/7890123456",
+        "shippingDays": 8,
+        "popularityScore": 86,
+        "tags": ["sunglasses", "retro", "polarized", "uv-protection"]
+    },
+    {
+        "id": "fashion_003",
+        "title": "Minimalist Gold Chain Necklace - Layered",
+        "category": "Fashion",
+        "subcategory": "Jewelry",
+        "imageUrl": "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80",
+        "price": 6.50,
+        "currency": "USD",
+        "rating": 4.7,
+        "reviewsCount": 4321,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005013456789012.html",
+        "shippingDays": 12,
+        "popularityScore": 91,
+        "tags": ["necklace", "jewelry", "gold", "minimalist", "layered"]
+    },
+    {
+        "id": "fashion_004",
+        "title": "Chunky Platform Sneakers - White Leather",
+        "category": "Fashion",
+        "subcategory": "Shoes",
+        "imageUrl": "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=600&q=80",
+        "price": 32.99,
+        "currency": "USD",
+        "rating": 4.4,
+        "reviewsCount": 2134,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/8901234567",
+        "shippingDays": 11,
+        "popularityScore": 84,
+        "tags": ["sneakers", "platform", "chunky", "white"]
+    },
+    {
+        "id": "fashion_005",
+        "title": "Crossbody Sling Bag - Waterproof Nylon",
+        "category": "Fashion",
+        "subcategory": "Bags",
+        "imageUrl": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80",
+        "price": 14.50,
+        "currency": "USD",
+        "rating": 4.6,
+        "reviewsCount": 2876,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005014567890123.html",
+        "shippingDays": 9,
+        "popularityScore": 87,
+        "tags": ["bag", "crossbody", "sling", "waterproof"]
+    },
+    {
+        "id": "beauty_001",
+        "title": "LED Face Lift Device - Anti-Aging Red Light",
+        "category": "Beauty",
+        "subcategory": "Skincare Devices",
+        "imageUrl": "https://images.unsplash.com/photo-1596462502278-27bfdd403348?auto=format&fit=crop&w=600&q=80",
+        "price": 26.99,
+        "currency": "USD",
+        "rating": 4.5,
+        "reviewsCount": 1987,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/9012345678",
+        "shippingDays": 7,
+        "popularityScore": 88,
+        "tags": ["led", "face-lift", "anti-aging", "skincare"]
+    },
+    {
+        "id": "beauty_002",
+        "title": "Ultrasonic Skin Scrubber - Deep Cleansing",
+        "category": "Beauty",
+        "subcategory": "Skincare Devices",
+        "imageUrl": "https://images.unsplash.com/photo-1522335789203-abd318982059?auto=format&fit=crop&w=600&q=80",
+        "price": 15.99,
+        "currency": "USD",
+        "rating": 4.6,
+        "reviewsCount": 3421,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005015678901234.html",
+        "shippingDays": 8,
+        "popularityScore": 86,
+        "tags": ["ultrasonic", "scrubber", "cleansing", "skincare"]
+    },
+    {
+        "id": "beauty_003",
+        "title": "Electric Makeup Brush Cleaner - Automatic Dryer",
+        "category": "Beauty",
+        "subcategory": "Makeup Tools",
+        "imageUrl": "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&w=600&q=80",
+        "price": 12.50,
+        "currency": "USD",
+        "rating": 4.7,
+        "reviewsCount": 2654,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/0123456789",
+        "shippingDays": 6,
+        "popularityScore": 89,
+        "tags": ["makeup", "brush-cleaner", "electric", "automatic"]
+    },
+    {
+        "id": "beauty_004",
+        "title": "Volcanic Oil Absorbing Roller - Reusable",
+        "category": "Beauty",
+        "subcategory": "Skincare Tools",
+        "imageUrl": "https://images.unsplash.com/photo-1570554886111-e80fcca6a029?auto=format&fit=crop&w=600&q=80",
+        "price": 7.99,
+        "currency": "USD",
+        "rating": 4.4,
+        "reviewsCount": 5432,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005016789012345.html",
+        "shippingDays": 9,
+        "popularityScore": 84,
+        "tags": ["volcanic", "oil-absorbing", "roller", "reusable"]
+    },
+    {
+        "id": "beauty_005",
+        "title": "Scalp Massager Shampoo Brush - Silicone",
+        "category": "Beauty",
+        "subcategory": "Hair Care",
+        "imageUrl": "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=600&q=80",
+        "price": 5.99,
+        "currency": "USD",
+        "rating": 4.8,
+        "reviewsCount": 7654,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005017890123456.html",
+        "shippingDays": 7,
+        "popularityScore": 92,
+        "tags": ["scalp", "massager", "shampoo", "brush", "viral"]
+    },
+    {
+        "id": "gaming_001",
+        "title": "RGB Headphone Stand with USB Hub",
+        "category": "Gaming",
+        "subcategory": "Accessories",
+        "imageUrl": "https://images.unsplash.com/photo-1612287672637-239511756262?auto=format&fit=crop&w=600&q=80",
+        "price": 16.99,
+        "currency": "USD",
+        "rating": 4.6,
+        "reviewsCount": 2134,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/1234567890",
+        "shippingDays": 7,
+        "popularityScore": 87,
+        "tags": ["headphone-stand", "rgb", "usb-hub", "gaming"]
+    },
+    {
+        "id": "gaming_002",
+        "title": "XL Extended Mouse Pad RGB - Waterproof",
+        "category": "Gaming",
+        "subcategory": "Mouse Pads",
+        "imageUrl": "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80",
+        "price": 13.99,
+        "currency": "USD",
+        "rating": 4.7,
+        "reviewsCount": 4567,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005018901234567.html",
+        "shippingDays": 8,
+        "popularityScore": 90,
+        "tags": ["mouse-pad", "xl", "rgb", "waterproof"]
+    },
+    {
+        "id": "gaming_003",
+        "title": "Console Controller Charging Dock - Dual USB",
+        "category": "Gaming",
+        "subcategory": "Accessories",
+        "imageUrl": "https://images.unsplash.com/photo-1593305841991-05c29736f079?auto=format&fit=crop&w=600&q=80",
+        "price": 11.50,
+        "currency": "USD",
+        "rating": 4.5,
+        "reviewsCount": 1876,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/2345678901",
+        "shippingDays": 6,
+        "popularityScore": 85,
+        "tags": ["charging-dock", "controller", "console", "dual-usb"]
+    },
+    {
+        "id": "gaming_004",
+        "title": "Blue Light Blocking Glasses - Gaming Edition",
+        "category": "Gaming",
+        "subcategory": "Accessories",
+        "imageUrl": "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=600&q=80",
+        "price": 9.99,
+        "currency": "USD",
+        "rating": 4.4,
+        "reviewsCount": 3210,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005019012345678.html",
+        "shippingDays": 9,
+        "popularityScore": 83,
+        "tags": ["blue-light", "glasses", "gaming", "eye-protection"]
+    },
+    {
+        "id": "gaming_005",
+        "title": "Streaming Microphone Arm - Adjustable Boom",
+        "category": "Gaming",
+        "subcategory": "Streaming",
+        "imageUrl": "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=600&q=80",
+        "price": 18.50,
+        "currency": "USD",
+        "rating": 4.6,
+        "reviewsCount": 1543,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/3456789012",
+        "shippingDays": 7,
+        "popularityScore": 86,
+        "tags": ["microphone-arm", "streaming", "boom", "adjustable"]
+    },
+    {
+        "id": "home_001",
+        "title": "Sunset Projector Lamp - Galaxy Star Light",
+        "category": "Home & Decor",
+        "subcategory": "Lighting",
+        "imageUrl": "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80",
+        "price": 19.99,
+        "currency": "USD",
+        "rating": 4.8,
+        "reviewsCount": 8765,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005020123456789.html",
+        "shippingDays": 8,
+        "popularityScore": 96,
+        "tags": ["projector", "lamp", "sunset", "galaxy", "viral"]
+    },
+    {
+        "id": "home_002",
+        "title": "Smart WiFi LED Strip Lights - 16 Million Colors",
+        "category": "Home & Decor",
+        "subcategory": "Lighting",
+        "imageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80",
+        "price": 14.99,
+        "currency": "USD",
+        "rating": 4.6,
+        "reviewsCount": 5432,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/4567890123",
+        "shippingDays": 7,
+        "popularityScore": 91,
+        "tags": ["led-strip", "smart", "wifi", "rgb"]
+    },
+    {
+        "id": "home_003",
+        "title": "Ultrasonic Essential Oil Diffuser - Wood Grain",
+        "category": "Home & Decor",
+        "subcategory": "Aromatherapy",
+        "imageUrl": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80",
+        "price": 16.50,
+        "currency": "USD",
+        "rating": 4.7,
+        "reviewsCount": 4321,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005021234567890.html",
+        "shippingDays": 9,
+        "popularityScore": 89,
+        "tags": ["diffuser", "essential-oil", "ultrasonic", "aromatherapy"]
+    },
+    {
+        "id": "home_004",
+        "title": "Weighted Blanket 15lbs - Cooling Bamboo",
+        "category": "Home & Decor",
+        "subcategory": "Bedding",
+        "imageUrl": "https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&w=600&q=80",
+        "price": 38.99,
+        "currency": "USD",
+        "rating": 4.8,
+        "reviewsCount": 2987,
+        "provider": "cj",
+        "productUrl": "https://www.cjdropshipping.com/product/detail/5678901234",
+        "shippingDays": 10,
+        "popularityScore": 93,
+        "tags": ["weighted-blanket", "cooling", "bamboo", "sleep"]
+    },
+    {
+        "id": "home_005",
+        "title": "Minimalist Floating Shelves - Set of 3",
+        "category": "Home & Decor",
+        "subcategory": "Storage",
+        "imageUrl": "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=600&q=80",
+        "price": 21.99,
+        "currency": "USD",
+        "rating": 4.5,
+        "reviewsCount": 3654,
+        "provider": "aliexpress",
+        "productUrl": "https://www.aliexpress.com/item/1005022345678901.html",
+        "shippingDays": 11,
+        "popularityScore": 85,
+        "tags": ["floating-shelves", "minimalist", "storage", "decor"]
+    }
+];
+
+/**
+ * Search options for product index
+ */
+export interface ProductIndexSearchOptions {
+    niche: string;
+    limit?: number;
+    minRating?: number;
+    maxPrice?: number;
+    sortBy?: 'popularity' | 'profit' | 'price' | 'rating';
+}
+
+/**
+ * In-memory product index
+ */
+class ProductIndex {
+    private products: ProductIndexEntry[] = [];
+
+    constructor() {
+        // Load embedded data synchronously - fast and reliable
+        this.products = PRODUCTS_DATA;
+    }
+
+    /**
+     * Initialize the index (no-op now as data is embedded)
+     */
+    async initialize() {
+        return Promise.resolve();
+    }
+
+    /**
+     * Search products by niche and filters
+     */
+    async search(options: ProductIndexSearchOptions): Promise<UnifiedProduct[]> {
+        const {
+            niche,
+            limit = 24,
+            minRating = 0,
+            maxPrice = Infinity,
+            sortBy = 'popularity'
+        } = options;
+
+        // Filter by niche
+        let filtered = this.products.filter(p => {
+            // Exact category match or subcategory match
+            const nicheMatch = p.category === niche ||
+                p.subcategory?.toLowerCase().includes(niche.toLowerCase());
+
+            // Apply filters
+            const ratingMatch = p.rating >= minRating;
+            const priceMatch = p.price <= maxPrice;
+
+            return nicheMatch && ratingMatch && priceMatch;
+        });
+
+        // If no exact matches, try fuzzy matching on tags
+        if (filtered.length === 0) {
+            filtered = this.products.filter(p => {
+                return p.tags.some(tag =>
+                    tag.toLowerCase().includes(niche.toLowerCase()) ||
+                    niche.toLowerCase().includes(tag.toLowerCase())
+                );
+            });
+        }
+
+        // Calculate scores and sort
+        const scored = filtered.map(product => ({
+            product,
+            score: this.calculateScore(product, sortBy)
+        }));
+
+        scored.sort((a, b) => b.score - a.score);
+
+        // Convert to UnifiedProduct format
+        const results = scored
+            .slice(0, limit)
+            .map(item => this.toUnifiedProduct(item.product));
+
+        return results;
+    }
+
+    /**
+     * Calculate product score for ranking
+     */
+    private calculateScore(product: ProductIndexEntry, sortBy: string): number {
+        switch (sortBy) {
+            case 'popularity':
+                return this.calculatePopularityScore(product);
+            case 'profit':
+                return calculateProfitSuggestion(product.price).marginPercent;
+            case 'price':
+                return 1000 - product.price; // Lower price = higher score
+            case 'rating':
+                return product.rating * 20; // Scale to 0-100
+            default:
+                return this.calculatePopularityScore(product);
+        }
+    }
+
+    /**
+     * Calculate composite popularity score
+     */
+    private calculatePopularityScore(product: ProductIndexEntry): number {
+        const popularityWeight = 0.4;
+        const profitWeight = 0.3;
+        const ratingWeight = 0.2;
+        const reviewWeight = 0.1;
+
+        const profitMargin = calculateProfitSuggestion(product.price).marginPercent;
+        const normalizedReviews = Math.min(product.reviewsCount / 1000, 1);
+
+        return (
+            product.popularityScore * popularityWeight +
+            profitMargin * profitWeight +
+            (product.rating / 5) * 100 * ratingWeight +
+            normalizedReviews * 100 * reviewWeight
+        );
+    }
+
+    /**
+     * Convert ProductIndexEntry to UnifiedProduct
+     */
+    private toUnifiedProduct(entry: ProductIndexEntry): UnifiedProduct {
+        const profitSuggestion = calculateProfitSuggestion(entry.price);
+
+        return {
+            id: entry.id,
+            title: entry.title,
+            imageUrl: entry.imageUrl,
+            price: entry.price,
+            currency: entry.currency,
+            rating: entry.rating,
+            reviewsCount: entry.reviewsCount,
+            supplierName: entry.provider === 'aliexpress' ? 'AliExpress' : 'CJ Dropshipping',
+            supplierUrl: entry.productUrl,
+            shippingDays: entry.shippingDays,
+            shippingCost: 0,
+            profitSuggestion
+        };
+    }
+
+    /**
+     * Get all available categories
+     */
+    getCategories(): string[] {
+        const categories = new Set(this.products.map(p => p.category));
+        return Array.from(categories).sort();
+    }
+
+    /**
+     * Get product count by category
+     */
+    getCategoryStats(): Record<string, number> {
+        const stats: Record<string, number> = {};
+        this.products.forEach(p => {
+            stats[p.category] = (stats[p.category] || 0) + 1;
+        });
+        return stats;
+    }
+}
+
+// Singleton instance
+const productIndex = new ProductIndex();
+
+/**
+ * Search products from the index
+ */
+export async function searchProductIndex(options: ProductIndexSearchOptions): Promise<UnifiedProduct[]> {
+    return await productIndex.search(options);
+}
+
+/**
+ * Get available categories
+ */
+export function getProductCategories(): string[] {
+    return productIndex.getCategories();
+}
+
+/**
+ * Get category statistics
+ */
+export function getProductCategoryStats(): Record<string, number> {
+    return productIndex.getCategoryStats();
+}
+
+export default productIndex;
