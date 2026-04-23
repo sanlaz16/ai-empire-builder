@@ -7,8 +7,7 @@ import { ProductBrain } from "@/lib/ai/productBrain";
  * Processes a batch of products for a user.
  */
 export const scoreProducts = inngest.createFunction(
-    { id: "score-products" },
-    { event: "app/ai.score-products" },
+    { id: "score-products", triggers: [{ event: "app/ai.score-products" }] },
     async ({ event, step }) => {
         const { userId, productIds } = event.data;
         const supabase = createServiceClient();
@@ -60,8 +59,7 @@ export const scoreProducts = inngest.createFunction(
  * Updates price, stock, and orders for a supplier.
  */
 export const syncSupplierData = inngest.createFunction(
-    { id: "supplier-sync" },
-    { event: "app/supplier.sync" },
+    { id: "supplier-sync", triggers: [{ event: "app/supplier.sync" }] },
     async ({ event, step }) => {
         const { userId, supplier } = event.data;
         const supabase = createServiceClient();
@@ -108,8 +106,7 @@ export const syncSupplierData = inngest.createFunction(
  * Background Job: AI Product Optimization
  */
 export const optimizeProduct = inngest.createFunction(
-    { id: "optimize-product" },
-    { event: "app/ai.optimize-product" },
+    { id: "optimize-product", triggers: [{ event: "app/ai.optimize-product" }] },
     async ({ event, step }) => {
         const { product } = event.data;
         const supabase = createServiceClient();

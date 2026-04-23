@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Instagram, Smartphone, Mail, Globe } from 'lucide-react';
+import { Smartphone, Mail, Globe } from 'lucide-react';
 
 export function Footer() {
     return (
@@ -20,7 +20,7 @@ export function Footer() {
                         </p>
                         <div className="flex items-center gap-4">
                             <a href="#" aria-label="Instagram" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
-                                <Instagram className="w-5 h-5" />
+                                <Smartphone className="w-5 h-5" />
                             </a>
                             <a href="#" aria-label="TikTok" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
                                 <Smartphone className="w-5 h-5" />

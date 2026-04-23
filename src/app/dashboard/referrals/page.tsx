@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import {
     Gift, Copy, Check, Users, MousePointerClick,
     DollarSign, Trophy, Share2, ExternalLink, Star,
-    TrendingUp, Zap, ChevronRight, RefreshCw, Facebook, Twitter, Crown
+    TrendingUp, Zap, ChevronRight, RefreshCw, Globe, Crown
 } from 'lucide-react';
 
 interface LeaderboardUser {
@@ -195,7 +195,7 @@ export default function ReferralsPage() {
                             rel="noopener noreferrer"
                             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-400/10 border border-blue-400/20 text-blue-400 text-xs font-black uppercase tracking-widest hover:bg-blue-400/20 transition-all"
                         >
-                            <Twitter className="w-3.5 h-3.5" /> X / Twitter
+                            <Share2 className="w-3.5 h-3.5" /> X / Twitter
                         </a>
                         
                         <a
@@ -204,7 +204,7 @@ export default function ReferralsPage() {
                             rel="noopener noreferrer"
                             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-black uppercase tracking-widest hover:bg-indigo-500/20 transition-all"
                         >
-                            <Facebook className="w-3.5 h-3.5" /> Facebook
+                            <Globe className="w-3.5 h-3.5" /> Facebook
                         </a>
                     </div>
                 </div>
