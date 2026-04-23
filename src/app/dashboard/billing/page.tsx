@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSubscription } from '@/context/SubscriptionContext';
 import { CreditCard, CheckCircle2, AlertCircle, Zap, Shield, ArrowUpRight } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
+import { trackEvent } from '@/lib/analytics/trackEvent';
 
 const PLANS = [
     {
@@ -36,6 +37,10 @@ export default function BillingPage() {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+    useEffect(() => {
+        trackEvent('pricing_viewed', { currentPlan: sub.plan });
+    }, []);
+
     // Handle incoming redirect messages
     useEffect(() => {
         const query = new URLSearchParams(window.location.search);
@@ -51,6 +56,7 @@ export default function BillingPage() {
         if (!priceId) return; // Free plan
         setLoadingPlan(planId);
         setErrorMessage(null);
+        trackEvent('checkout_started', { planId, priceId });
 
         try {
             const res = await fetch('/api/billing/checkout', {

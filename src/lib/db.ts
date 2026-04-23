@@ -308,15 +308,19 @@ export const upsertSellerProfile = async (userId: string, profile: Partial<Selle
 // WAITLIST
 // ==========================================
 
-export const addToWaitlist = async (email: string, referredBy?: string) => {
+export const addToWaitlist = async (email: string, metadata: any = {}) => {
     if (!isSupabaseConfigured()) {
         console.warn('Supabase not configured, mocking waitlist join');
         return { data: { id: 'mock-id-' + Date.now() }, error: null };
     }
 
     const { data, error } = await supabase
-        .from('waitlist')
-        .insert({ email, referred_by: referredBy || null })
+        .from('waitlist_entries')
+        .insert({ 
+            email, 
+            ...metadata,
+            created_at: new Date().toISOString()
+        })
         .select()
         .single();
 

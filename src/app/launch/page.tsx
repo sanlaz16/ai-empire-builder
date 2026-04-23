@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { addToWaitlist } from '@/lib/db';
+import { trackEvent } from '@/lib/analytics/trackEvent';
 import { ArrowRight, CheckCircle2, Star, Zap, ShoppingBag, TrendingUp, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+
+import { getClientMetadata } from '@/lib/analytics/clientMetadata';
 
 export default function LaunchPage() {
     const searchParams = useSearchParams();
@@ -16,12 +19,24 @@ export default function LaunchPage() {
     const [myWaitlistId, setMyWaitlistId] = useState('');
     const [error, setError] = useState('');
 
+    useEffect(() => {
+        trackEvent('landing_view');
+    }, []);
+
     const handleJoin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError('');
 
-        const { data, error: err } = await addToWaitlist(email, refId as string);
+        const meta = getClientMetadata();
+        const { data, error: err } = await addToWaitlist(email, {
+            source: meta.source,
+            medium: meta.medium,
+            campaign: meta.campaign,
+            device_type: meta.deviceType,
+            browser: meta.browser,
+            notes: refId ? `Referred by ${refId}` : null
+        });
 
         if (err) {
             if (err.code === '23505') {
@@ -32,6 +47,7 @@ export default function LaunchPage() {
         } else if (data) {
             setJoined(true);
             setMyWaitlistId(data.id);
+            trackEvent('waitlist_joined', { email });
         }
 
         setLoading(false);

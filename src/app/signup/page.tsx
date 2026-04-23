@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
-import { Check, AlertCircle, ChevronDown, ChevronUp, Shield } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 import { useAuth } from '@/context/AuthContext';
+import { trackEvent } from '@/lib/analytics/trackEvent';
+import { useEffect, useState } from 'react';
 
 export default function SignUp() {
     const router = useRouter();
@@ -17,6 +17,10 @@ export default function SignUp() {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [showOptional, setShowOptional] = useState(false);
     const { signInWithGoogle } = useAuth();
+
+    useEffect(() => {
+        trackEvent('signup_started');
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -66,6 +70,7 @@ export default function SignUp() {
             if (signUpError) throw signUpError;
 
             if (data.session) {
+                trackEvent('signup_completed', { method: 'email', email });
                 router.push('/onboarding');
             } else {
                 setSuccessMessage('Conta criada! Verifique seu e-mail para ativar a conta.');
