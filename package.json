@@ -8,6 +8,10 @@
         "start": "next start"
     },
     "dependencies": {
+        "@supabase/ssr": "^0.10.2",
+        "@supabase/supabase-js": "^2.104.1",
+        "@upstash/redis": "^1.37.0",
+        "framer-motion": "^12.38.0",
         "inngest": "^4.2.4",
         "js-cookie": "^3.0.5",
         "lucide-react": "^1.9.0",
