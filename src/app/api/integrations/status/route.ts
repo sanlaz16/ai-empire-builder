@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProviderCredentials, getMaskedHint } from '@/lib/integrations/credentials';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/integrations/status
  * Get integration status for current user

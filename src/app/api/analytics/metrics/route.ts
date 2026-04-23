@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/server';
 
+export const dynamic = 'force-dynamic';
+
 // Plan price lookup (cents → dollars for MRR calculation)
 const PLAN_PRICES: Record<string, number> = {
     free: 0,

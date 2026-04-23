@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+
+export const dynamic = 'force-dynamic';
 import { getCached, setCached, productCacheKey } from '@/lib/utils/productCache';
 
 export async function GET(request: Request) {

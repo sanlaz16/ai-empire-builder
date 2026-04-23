@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
+export const dynamic = 'force-dynamic';
+
 /** PATCH /api/onboarding/progress — save current step + data */
 export async function PATCH(req: Request) {
     try {
