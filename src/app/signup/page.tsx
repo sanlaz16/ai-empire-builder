@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { useAuth } from '@/context/AuthContext';
 import { trackEvent } from '@/lib/analytics/trackEvent';
 import { useEffect, useState } from 'react';
+import { Check, AlertCircle, ChevronDown, ChevronUp, Shield } from 'lucide-react';
 
 export default function SignUp() {
     const router = useRouter();

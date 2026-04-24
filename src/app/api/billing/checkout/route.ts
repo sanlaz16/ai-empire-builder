@@ -5,6 +5,8 @@ import { getPlan, PlanId } from '@/lib/plans';
 import { getServerLocation } from '@/lib/analytics/serverLocation';
 import { createClient as createSupabaseAdmin } from '@supabase/supabase-js';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
     try {
         const { planId } = await req.json();

@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getServerLocation } from '@/lib/analytics/serverLocation';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * POST /api/analytics/event
  * Unified endpoint for Funnel Events and Live Sessions.
