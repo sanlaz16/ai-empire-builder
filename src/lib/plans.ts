@@ -10,6 +10,7 @@ export interface Plan {
     name: string;
     description?: string;
     priceMonthly: number;      // USD
+    priceDisplay?: string;     // BRL formatted string
     stripePriceId: string;     // from env
     pagarmePlanId?: string;    // from env
     maxProducts?: number;      // legacy/soft limit
@@ -20,43 +21,46 @@ export interface Plan {
 export const PLANS: Plan[] = [
     {
         id: 'free',
-        name: 'Free / Starter',
-        description: 'For exploring the platform',
-        priceMonthly: 0,
+        name: 'Inicial',
+        description: 'Para explorar a plataforma',
+        priceMonthly: 19.99,
+        priceDisplay: 'R$ 19,99',
         stripePriceId: '',
         features: [
-            'Browse products',
-            'Limited tools',
-            'Beta access',
+            'Navegar por produtos',
+            'Ferramentas limitadas',
+            'Acesso beta',
         ],
     },
     {
         id: 'pro',
-        name: 'Pro',
-        description: 'Best for launching stores',
-        priceMonthly: 49,
+        name: 'Crescimento',
+        description: 'Melhor para lançar lojas',
+        priceMonthly: 49.99,
+        priceDisplay: 'R$ 49,99',
         stripePriceId: process.env.STRIPE_PRO_PRICE_ID || '',
         pagarmePlanId: process.env.PAGARME_PRO_PLAN_ID || '',
         highlighted: true,
         features: [
-            'AI product tools',
-            'Optimization',
-            'Full import flow',
-            'Better support',
+            'Ferramentas de IA para produtos',
+            'Otimização avançada',
+            'Fluxo de importação completo',
+            'Suporte prioritário',
         ],
     },
     {
         id: 'elite',
-        name: 'Enterprise / Elite',
-        description: 'For scaling operations',
-        priceMonthly: 99,
+        name: 'Império',
+        description: 'Para escalar operações',
+        priceMonthly: 149.99,
+        priceDisplay: 'R$ 149,99',
         stripePriceId: process.env.STRIPE_ELITE_PRICE_ID || '',
         pagarmePlanId: process.env.PAGARME_ELITE_PLAN_ID || '',
         features: [
-            'Everything in Pro',
-            'Advanced features',
-            'Priority support',
-            'Growth tools',
+            'Tudo no plano Crescimento',
+            'Recursos avançados',
+            'Suporte VIP',
+            'Ferramentas de crescimento',
         ],
     },
 ];

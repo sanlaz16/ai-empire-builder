@@ -64,7 +64,7 @@ export default function PricingPage() {
                                 </div>
                                 <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">{plan.name}</h3>
                                 <div className="flex items-baseline justify-center gap-1">
-                                    <span className="text-5xl font-black text-white">${plan.priceMonthly}</span>
+                                    <span className="text-5xl font-black text-white">{plan.priceDisplay}</span>
                                     <span className="text-gray-500 font-bold uppercase text-xs tracking-widest">/mo</span>
                                 </div>
                             </div>

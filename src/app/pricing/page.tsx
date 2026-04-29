@@ -12,20 +12,20 @@ export default function Pricing() {
     const plans: Plan[] = [
         {
             name: 'Inicial',
-            price: 'R$19,90',
+            price: 'R$ 19,90',
             features: ['Construtor de Loja Básico', '500 Sugestões IA/mês', 'Temas Padrão', 'Suporte Básico'],
             recommended: false,
         },
         {
             name: 'Crescimento',
-            price: 'R$49,90',
+            price: 'R$ 49,90',
             features: ['Tudo do Inicial', 'Estúdio de Fotos IA', 'Criador de Logo Avançado', 'Suporte Prioritário', '3 Lojas Conectadas'],
             recommended: true,
             color: 'border-primary/30 shadow-lg shadow-primary/10'
         },
         {
             name: 'Império',
-            price: 'R$149,90',
+            price: 'R$ 149,90',
             features: ['Tudo do Crescimento', 'Gerador de Vídeo Ads IA (Veo3)', 'Automação de Dropshipping', 'Gerente de Sucesso Dedicado', 'Lojas Ilimitadas'],
             recommended: false,
         }

@@ -53,7 +53,7 @@ export default function DashboardOverview() {
                     <h3 className="text-gray-400 text-sm font-bold uppercase tracking-widest mb-2">Plano Atual</h3>
                     <div className="flex items-baseline gap-2 mb-8">
                         <span className="text-4xl font-black text-white">Básico</span>
-                        <span className="text-2xl text-gray-500 font-bold">R$19,90/mês</span>
+                        <span className="text-2xl text-gray-500 font-bold">R$ 19,90/mês</span>
                     </div>
 
                     <div className="space-y-6 mb-8 bg-white/[0.02] p-6 rounded-xl border border-white/5">

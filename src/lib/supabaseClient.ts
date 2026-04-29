@@ -10,16 +10,5 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // Create a browser client for interacting with Supabase from client components
 export const supabase = createBrowserClient(
     supabaseUrl || 'https://placeholder-url.supabase.co',
-    supabaseAnonKey || 'placeholder-key',
-    {
-        auth: {
-            persistSession: true,
-            storageKey: 'supabase-auth-token',
-        },
-        cookieOptions: {
-            secure: false, // Set to false for localhost
-            sameSite: 'lax',
-            path: '/',
-        }
-    }
+    supabaseAnonKey || 'placeholder-key'
 );

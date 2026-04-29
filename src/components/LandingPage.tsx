@@ -44,8 +44,8 @@ function PricingCard({ plan, onSelect }: { plan: typeof PLANS[0]; onSelect: () =
                     <p className="text-sm text-gray-400 font-bold mb-4">{plan.description}</p>
                 )}
                 <div className="flex items-baseline gap-1">
-                    <span className="text-5xl font-black text-white">${plan.priceMonthly}</span>
-                    <span className="text-gray-500">/mo</span>
+                    <span className="text-5xl font-black text-white">{plan.priceDisplay}</span>
+                    <span className="text-gray-500">/mês</span>
                 </div>
             </div>
 
@@ -67,7 +67,7 @@ function PricingCard({ plan, onSelect }: { plan: typeof PLANS[0]; onSelect: () =
                         : 'bg-white/8 text-white border border-white/10 hover:bg-white/15'
                     }`}
             >
-                Start Free Trial <ArrowRight className="w-4 h-4" />
+                Comece o Teste Grátis <ArrowRight className="w-4 h-4" />
             </button>
         </div>
     );
@@ -104,9 +104,9 @@ export default function LandingPage() {
                         <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
                     </div>
                     <div className="flex items-center gap-3">
-                        <Link href="/signin" className="text-sm font-bold text-gray-400 hover:text-white transition-colors px-4 py-2">Log In</Link>
+                        <Link href="/signin" className="text-sm font-bold text-gray-400 hover:text-white transition-colors px-4 py-2">Entrar</Link>
                         <button onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })} className="btn btn-primary text-sm py-2 px-5 font-black">
-                            Start Free Trial
+                            Comece o Teste Grátis
                         </button>
                     </div>
                 </div>
@@ -128,7 +128,7 @@ export default function LandingPage() {
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300">
                             vencedores
                         </span>{' '}
-                        com IA
+                        com AI
                     </h1>
 
                     <p className="text-xl md:text-2xl text-gray-400 font-bold max-w-2xl mx-auto mb-12 leading-relaxed">
@@ -140,7 +140,7 @@ export default function LandingPage() {
                             onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
                             className="btn btn-primary text-base px-10 py-5 font-black tracking-widest group flex items-center justify-center gap-3 shadow-[0_0_60px_rgba(34,197,94,0.3)] w-full sm:w-auto"
                         >
-                            Start Free Trial <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            Comece o Teste Grátis <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </button>
                         <button 
                             onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
@@ -149,7 +149,7 @@ export default function LandingPage() {
                             <div className="h-12 w-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
                                 <Play className="w-4 h-4 ml-0.5" />
                             </div>
-                            See How It Works
+                            Veja Como Funciona
                         </button>
                     </div>
 
@@ -210,8 +210,8 @@ export default function LandingPage() {
             <section id="pricing" className="py-28 px-6">
                 <div className="container max-w-5xl mx-auto">
                     <div className="text-center mb-16">
-                        <h2 className="text-5xl font-black uppercase tracking-tighter mb-4">Simple, transparent pricing.</h2>
-                        <p className="text-xl text-gray-500 font-bold">Start free. Upgrade only when you’re ready.</p>
+                        <h2 className="text-5xl font-black uppercase tracking-tighter mb-4">Preços simples e transparentes.</h2>
+                        <p className="text-xl text-gray-500 font-bold">Comece grátis. Atualize quando estiver pronto.</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
@@ -254,7 +254,7 @@ export default function LandingPage() {
                         onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
                         className="btn btn-primary text-lg px-16 py-5 font-black tracking-widest inline-flex items-center justify-center gap-3 shadow-[0_0_80px_rgba(34,197,94,0.4)]"
                     >
-                        Start Free Trial <ArrowRight className="w-5 h-5" />
+                        Comece o Teste Grátis <ArrowRight className="w-5 h-5" />
                     </button>
                 </div>
             </section>

@@ -39,8 +39,9 @@ export function useSubscription() {
         loadSubscription();
 
         // Optional: Listen for profile changes
+        const channelName = `profile_changes_${Math.random().toString(36).substring(7)}`;
         const channel = supabase
-            .channel('profile_changes')
+            .channel(channelName)
             .on('postgres_changes', {
                 event: 'UPDATE',
                 schema: 'public',

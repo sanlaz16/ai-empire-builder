@@ -15,7 +15,9 @@ import {
     CreditCard,
     Activity,
     User,
-    Gift
+    Gift,
+    Sparkles,
+    Wand2
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useSubscription } from '@/lib/subscription/useSubscription';
@@ -30,6 +32,8 @@ export default function Sidebar() {
         { name: 'Desempenho', href: '/dashboard/performance', icon: Activity },
         { name: 'Perfil da Loja', href: '/dashboard/store-profile', icon: Store },
         { name: 'Buscar Produtos', href: '/dashboard/product-finder', icon: Package },
+        { name: 'Pesquisa com IA', href: '/dashboard/product-research', icon: Sparkles },
+        { name: 'Conteúdo da Loja', href: '/dashboard/store-content', icon: Wand2 },
         { name: 'Meus Posts TikTok', href: '/dashboard/tiktok-posts', icon: Video },
         { name: 'Radar de Tendências', href: '/dashboard/trends', icon: Zap },
         { name: 'Meus Nichos', href: '/dashboard/niches', icon: Layers },

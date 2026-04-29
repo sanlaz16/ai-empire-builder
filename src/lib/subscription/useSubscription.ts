@@ -32,8 +32,9 @@ export function useSubscription() {
         getProfile();
 
         // Optional: Realtime sync
+        const channelName = `profile_changes_${Math.random().toString(36).substring(7)}`;
         const channel = supabase
-            .channel('profile_changes')
+            .channel(channelName)
             .on(
                 'postgres_changes',
                 { event: 'UPDATE', schema: 'public', table: 'profiles' },
