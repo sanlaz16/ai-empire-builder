@@ -3,8 +3,14 @@
 import { useState, useEffect } from 'react';
 import { Clock, Zap, Users, MousePointer2, DollarSign, Copy, Check, Flame } from 'lucide-react';
 import WinningProductsWidget from '@/components/dashboard/WinningProductsWidget';
+import { useAuth } from '@/context/AuthContext';
 
 export default function DashboardOverview() {
+    const { user } = useAuth();
+    const displayName = user?.user_metadata?.full_name
+        || user?.email?.split('@')[0]
+        || 'Empreendedor';
+
     const [referralStats, setReferralStats] = useState({
         code: 'LOADING...',
         clicks: 0,
@@ -37,7 +43,7 @@ export default function DashboardOverview() {
     return (
         <div className="p-8 max-w-6xl mx-auto space-y-8">
             <div className="mb-10">
-                <h1 className="text-3xl font-bold mb-2">Bem-vindo de volta, John 👋</h1>
+                <h1 className="text-3xl font-bold mb-2">Bem-vindo de volta, {displayName} 👋</h1>
                 <p className="text-gray-400">Veja o que está acontecendo com seu império hoje.</p>
             </div>
 

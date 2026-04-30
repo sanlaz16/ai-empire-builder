@@ -14,6 +14,8 @@ export default function SignIn() {
     const { signInWithGoogle, signInWithDev, user, signOut } = useAuth();
     const [error, setError] = useState<string | null>(null);
     const [isDev, setIsDev] = useState(false);
+    const [forgotSent, setForgotSent] = useState(false);
+    const [forgotLoading, setForgotLoading] = useState(false);
 
     useEffect(() => {
         setIsDev(window.location.hostname === 'localhost');
@@ -44,8 +46,30 @@ export default function SignIn() {
         if (error) {
             setError(error.message);
             setLoading(false);
+        }
+        // On success: AuthContext's onAuthStateChange fires → user state updates →
+        // the useEffect above detects user and calls router.push('/dashboard').
+        // Do NOT call router.push here to avoid racing the session propagation.
+    };
+
+    const handleForgotPassword = async () => {
+        if (!email) {
+            setError('Digite seu e-mail acima antes de redefinir a senha.');
+            return;
+        }
+        setForgotLoading(true);
+        setError(null);
+
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: 'https://ai-empire-builder-9ms4.vercel.app/reset-password',
+        });
+
+        setForgotLoading(false);
+
+        if (error) {
+            setError(error.message);
         } else {
-            router.push('/dashboard');
+            setForgotSent(true);
         }
     };
 
@@ -67,6 +91,12 @@ export default function SignIn() {
                         </div>
                     )}
 
+                    {forgotSent && (
+                        <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-3 rounded-lg mb-4 text-sm text-center">
+                            ✅ E-mail de redefinição enviado! Verifique sua caixa de entrada.
+                        </div>
+                    )}
+
                     <form onSubmit={handleEmailLogin} className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-1">Endereço de E-mail</label>
@@ -83,7 +113,14 @@ export default function SignIn() {
                         <div>
                             <div className="flex justify-between items-center mb-1">
                                 <label className="block text-sm font-medium text-gray-300">Senha</label>
-                                <a href="#" className="text-xs text-primary hover:text-primary-hover">Esqueceu a senha?</a>
+                                <button
+                                    type="button"
+                                    onClick={handleForgotPassword}
+                                    disabled={forgotLoading}
+                                    className="text-xs text-primary hover:text-primary-hover disabled:opacity-50 transition-colors"
+                                >
+                                    {forgotLoading ? 'Enviando...' : 'Esqueceu a senha?'}
+                                </button>
                             </div>
                             <input
                                 type="password"
@@ -101,7 +138,7 @@ export default function SignIn() {
                             className={`w-full btn btn-primary py-3 mt-4 ${loading ? 'opacity-80 cursor-wait' : ''}`}
                         >
                             {loading ? (
-                                <span className="flex items-center gap-2">
+                                <span className="flex items-center gap-2 justify-center">
                                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                                     Entrando...
                                 </span>
@@ -146,13 +183,16 @@ export default function SignIn() {
                         Continuar com Google
                     </button>
 
-                    <button
-                        onClick={signInWithDev}
-                        type="button"
-                        className="w-full mt-3 btn bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/30 flex items-center gap-3 py-3 justify-center font-bold"
-                    >
-                        🛠️ Login Dev (Bypass)
-                    </button>
+                    {/* Dev bypass — only shown on localhost */}
+                    {isDev && (
+                        <button
+                            onClick={signInWithDev}
+                            type="button"
+                            className="w-full mt-3 btn bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/30 flex items-center gap-3 py-3 justify-center font-bold"
+                        >
+                            🛠️ Login Dev (Bypass)
+                        </button>
+                    )}
 
                     {isDev && (
                         <button

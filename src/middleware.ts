@@ -5,11 +5,18 @@ import { NextResponse, type NextRequest } from 'next/server';
 const PROTECTED_PATHS = ['/dashboard', '/admin'];
 // Routes that should redirect to dashboard if already authed
 const AUTH_PATHS = ['/signin', '/signup'];
+// Routes that are fully public — no auth check or redirect
+const PUBLIC_PATHS = ['/reset-password'];
 // Routes that are part of onboarding and should bypass the main gate
 const ONBOARDING_PATHS = ['/onboarding'];
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
+
+    // Fully public routes — skip all auth checks
+    if (PUBLIC_PATHS.some(p => pathname.startsWith(p))) {
+        return NextResponse.next();
+    }
 
     let response = NextResponse.next({
         request: { headers: request.headers },
@@ -93,21 +100,23 @@ export async function middleware(request: NextRequest) {
         // Exclude billing page from the gate to avoid redirect loops
         if (pathname !== '/dashboard/billing') {
             try {
-                const { data: subscription } = await supabase
+                const { data: subscription, error: subError } = await supabase
                     .from('subscriptions')
                     .select('status')
                     .eq('user_id', user.id)
                     .single();
 
-                const isActive = subscription?.status === 'active' || subscription?.status === 'trialing';
+                console.log('[Middleware] subscription check:', { userId: user.id, status: subscription?.status, subError: subError?.code });
 
-                if (!isActive) {
+                // Only block if we got a real subscription row that is NOT active.
+                // New users (no row yet) are allowed through so they can see the dashboard.
+                if (subscription && subscription.status !== 'active' && subscription.status !== 'trialing') {
+                    console.log('[Middleware] Subscription inactive → redirecting to /dashboard/billing');
                     return NextResponse.redirect(new URL('/dashboard/billing', request.url));
                 }
             } catch (e) {
-                console.error('Middleware: Failed to check subscription:', e);
-                // In dev mode, allow access if Supabase fails
-                if (process.env.NODE_ENV === 'development') return response;
+                // On any DB/network error, let the user through rather than hard-blocking
+                console.error('Middleware: Failed to check subscription, allowing through:', e);
             }
         }
     }
