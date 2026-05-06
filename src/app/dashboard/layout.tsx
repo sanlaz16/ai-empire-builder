@@ -3,10 +3,12 @@
 import Sidebar from '@/components/Sidebar';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { SubscriptionProvider, useSubscription } from '@/context/SubscriptionContext';
 import DevResetButton from '@/components/DevResetButton';
 import FeedbackWidget from '@/components/FeedbackWidget';
+import { useTranslation } from '@/hooks/useTranslation';
+import { X } from 'lucide-react';
 
 function PlanBadge() {
     const { plan, isActive, loading } = useSubscription();
@@ -21,11 +23,41 @@ function PlanBadge() {
     );
 }
 
+function BetaBanner() {
+    const { t } = useTranslation();
+    const [dismissed, setDismissed] = useState(false);
+
+    useEffect(() => {
+        const stored = localStorage.getItem('empire-beta-banner-dismissed');
+        if (stored === '1') setDismissed(true);
+    }, []);
+
+    const dismiss = () => {
+        setDismissed(true);
+        localStorage.setItem('empire-beta-banner-dismissed', '1');
+    };
+
+    if (dismissed) return null;
+
+    return (
+        <div className="bg-primary/5 border-b border-primary/10 px-6 py-2 flex items-center justify-between text-xs font-bold text-primary/80">
+            <span>{t('layout.betaBannerText')}</span>
+            <button
+                onClick={dismiss}
+                className="ml-4 text-primary/50 hover:text-primary transition-colors flex items-center gap-1 shrink-0"
+            >
+                {t('layout.betaBannerDismiss')} <X className="w-3 h-3" />
+            </button>
+        </div>
+    );
+}
+
 export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const { t } = useTranslation();
     const { user, isLoading } = useAuth();
     const router = useRouter();
 
@@ -40,7 +72,7 @@ export default function DashboardLayout({
             <div className="min-h-screen flex items-center justify-center bg-background text-primary">
                 <div className="text-center">
                     <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="animate-pulse">Verificando Acesso...</p>
+                    <p className="animate-pulse">{t('layout.verifyingAccess')}</p>
                 </div>
             </div>
         );
@@ -58,9 +90,14 @@ export default function DashboardLayout({
                     <header className="h-16 border-b border-white/10 flex items-center justify-between px-8 bg-surface/50 backdrop-blur-md sticky top-0 z-40">
                         <div className="flex items-center gap-3">
                             <h2 className="font-bold text-lg hidden md:block">EmpireBuilder</h2>
-                            <div className="hidden md:flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20">
+                            {/* Beta badge — short on mobile, full on desktop */}
+                            <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
                                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                                <span className="text-[10px] font-black text-primary uppercase tracking-wider">BETA</span>
+                                <span className="text-[10px] font-black text-primary uppercase tracking-wider">{t('layout.betaFull')}</span>
+                            </div>
+                            <div className="flex md:hidden items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20">
+                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                                <span className="text-[10px] font-black text-primary uppercase tracking-wider">{t('layout.betaBadge')}</span>
                             </div>
                         </div>
                         <div className="flex items-center gap-4 ml-auto">
@@ -75,6 +112,9 @@ export default function DashboardLayout({
                             </div>
                         </div>
                     </header>
+
+                    {/* Beta disclaimer banner */}
+                    <BetaBanner />
 
                     {/* Main Content */}
                     <main className="flex-grow bg-background relative overflow-hidden">

@@ -4,6 +4,7 @@ import './globals.css';
 import { IntegrationProvider } from '@/context/IntegrationContext';
 import { AuthProvider } from '@/context/AuthContext';
 import OneSignalProvider from '@/components/OneSignalProvider';
+import { LocaleProvider } from '@/context/LocaleContext';
 
 import { ToastProvider } from '@/components/ui/Toast';
 
@@ -26,12 +27,14 @@ export default function RootLayout({
             <body className={inter.className}>
                 <SupabaseConfigWarning />
                 <ToastProvider>
-                    <AuthProvider>
-                        <OneSignalProvider />
-                        <IntegrationProvider>
-                            {children}
-                        </IntegrationProvider>
-                    </AuthProvider>
+                    <LocaleProvider>
+                        <AuthProvider>
+                            <OneSignalProvider />
+                            <IntegrationProvider>
+                                {children}
+                            </IntegrationProvider>
+                        </AuthProvider>
+                    </LocaleProvider>
                 </ToastProvider>
             </body>
         </html>
