@@ -128,57 +128,63 @@ export default function DashboardOverview() {
                 </div>
 
                 {/* Referral Card */}
-                <div className="lg:col-span-2 glass-card border-blue-500/20">
-                    <div className="flex items-center gap-3 mb-5">
+                <div className="lg:col-span-2 glass-card border-blue-500/20 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
+                    
+                    <div className="flex items-center gap-3 mb-5 relative z-10">
                         <div className="h-10 w-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
                             <Gift className="w-5 h-5" />
                         </div>
                         <div>
-                            <h3 className="font-black text-white">Indique & Ganhe 🚀</h3>
-                            <p className="text-xs text-gray-500 font-bold">Compartilhe seu código e ganhe dias grátis</p>
+                            <h3 className="font-black text-white">Minhas Indicações 🚀</h3>
+                            <p className="text-xs text-gray-500 font-bold">Convide amigos e ganhe acesso grátis</p>
                         </div>
                     </div>
 
                     {/* Referral code */}
-                    <div className="flex items-center gap-3 mb-5">
-                        <div className="bg-black/50 border border-white/10 px-5 py-3 rounded-xl flex-1 flex items-center justify-between">
-                            <span className="text-xl font-black text-primary tracking-widest">{statsLoaded ? referralStats.code : '...'}</span>
-                            <button onClick={copyCode} className="p-2 hover:bg-white/10 rounded-lg transition-all" title="Copiar código">
-                                {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-gray-400 hover:text-white" />}
+                    <div className="flex items-center gap-3 mb-5 relative z-10">
+                        <div className="bg-black/50 border border-white/10 px-5 py-3 rounded-xl flex-1 flex items-center justify-between group hover:border-blue-500/30 transition-all">
+                            <span className="text-xl font-black text-blue-400 tracking-widest">{statsLoaded ? referralStats.code : '...'}</span>
+                            <button onClick={copyCode} className="p-2 hover:bg-blue-500/20 rounded-lg transition-all" title="Copiar código">
+                                {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-blue-400 hover:text-blue-300" />}
                             </button>
                         </div>
                     </div>
 
+                    {/* Progress Bar */}
+                    <div className="mb-6 relative z-10 p-4 bg-white/[0.02] rounded-xl border border-white/5">
+                        <div className="flex justify-between items-end mb-2">
+                            <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Progresso</span>
+                            <span className="text-sm font-black text-white bg-white/10 px-2 py-0.5 rounded-md">
+                                {referralStats.conversions} / {referralStats.conversions < 5 ? 5 : 10} indicações
+                            </span>
+                        </div>
+                        <div className="w-full bg-black/50 rounded-full h-3 border border-white/5 overflow-hidden">
+                            <div 
+                                className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full transition-all duration-1000 ease-out"
+                                style={{ width: `${Math.min((referralStats.conversions / (referralStats.conversions < 5 ? 5 : 10)) * 100, 100)}%` }} 
+                            />
+                        </div>
+                    </div>
+
                     {/* Reward tiers */}
-                    <div className="grid grid-cols-2 gap-3 mb-5">
+                    <div className="grid grid-cols-2 gap-3 relative z-10">
                         {referralTiers.map(tier => (
-                            <div key={tier.count} className="p-3 bg-white/[0.03] rounded-xl border border-white/5 flex items-center gap-3">
-                                <span className="text-2xl">{tier.icon}</span>
-                                <div>
-                                    <div className="text-xs font-black text-white">{tier.count} indicações</div>
-                                    <div className="text-[10px] text-primary font-bold">{tier.reward}</div>
+                            <div key={tier.count} className={`p-4 rounded-xl border transition-all ${referralStats.conversions >= tier.count ? 'bg-blue-500/10 border-blue-500/30' : 'bg-white/[0.02] border-white/5'}`}>
+                                <div className="flex items-center gap-3">
+                                    <span className="text-2xl">{tier.icon}</span>
+                                    <div>
+                                        <div className="text-sm font-black text-white">{tier.count} indicações</div>
+                                        <div className={`text-xs font-bold ${referralStats.conversions >= tier.count ? 'text-blue-400' : 'text-gray-500'}`}>{tier.reward}</div>
+                                    </div>
+                                    {referralStats.conversions >= tier.count && (
+                                        <div className="ml-auto bg-green-500/20 text-green-500 p-1 rounded-full">
+                                            <Check className="w-3 h-3" />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))}
-                    </div>
-
-                    {/* Stats */}
-                    <div className="grid grid-cols-3 gap-3">
-                        <div className="text-center p-3 bg-white/[0.02] rounded-xl border border-white/5">
-                            <MousePointer2 className="w-4 h-4 text-blue-400 mx-auto mb-1 opacity-60" />
-                            <div className="text-lg font-black text-white">{referralStats.clicks}</div>
-                            <div className="text-[10px] text-gray-600 font-black uppercase tracking-widest">Cliques</div>
-                        </div>
-                        <div className="text-center p-3 bg-white/[0.02] rounded-xl border border-white/5">
-                            <Users className="w-4 h-4 text-green-400 mx-auto mb-1 opacity-60" />
-                            <div className="text-lg font-black text-white">{referralStats.conversions}</div>
-                            <div className="text-[10px] text-gray-600 font-black uppercase tracking-widest">Indicações</div>
-                        </div>
-                        <div className="text-center p-3 bg-primary/5 rounded-xl border border-primary/10">
-                            <DollarSign className="w-4 h-4 text-primary mx-auto mb-1 opacity-60" />
-                            <div className="text-lg font-black text-primary">R${referralStats.earnings}</div>
-                            <div className="text-[10px] text-primary/40 font-black uppercase tracking-widest">Ganhos</div>
-                        </div>
                     </div>
                 </div>
             </div>

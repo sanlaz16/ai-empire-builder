@@ -103,7 +103,7 @@ export default function DashboardLayout({
                         <div className="flex items-center gap-4 ml-auto">
                             <div className="flex items-center gap-3">
                                 <div className="text-right hidden md:block">
-                                    <div className="text-sm font-bold">{user.user_metadata.full_name || user.email}</div>
+                                    <div className="text-sm font-bold">{user?.user_metadata?.full_name || user?.email}</div>
                                     <PlanBadge />
                                 </div>
                                 <div className="h-10 w-10 bg-gradient-to-br from-primary/60 to-emerald-600 rounded-full border-2 border-white/10 flex items-center justify-center text-black font-black">

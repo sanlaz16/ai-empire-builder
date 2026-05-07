@@ -41,11 +41,31 @@ export default function SignUp() {
         const state = formData.get('state') as string;
         const postal_code = formData.get('postal_code') as string;
         const enable2fa = formData.get('enable_2fa') === 'on';
+        const referralCodeInput = formData.get('referral_code_input') as string;
 
         if (password !== confirmPwd) {
             setError('As senhas não coincidem.');
             setLoading(false);
             return;
+        }
+
+        // Validate Referral Code if provided
+        let finalReferralCode = referralCodeInput || referralCode;
+        if (finalReferralCode) {
+            finalReferralCode = finalReferralCode.trim().toUpperCase();
+            try {
+                const res = await fetch(`/api/referrals/validate?code=${finalReferralCode}`);
+                const data = await res.json();
+                if (!res.ok || !data.valid) {
+                    setError(data.error || 'Código de indicação inválido.');
+                    setLoading(false);
+                    return;
+                }
+            } catch (err) {
+                setError('Erro ao validar código de indicação.');
+                setLoading(false);
+                return;
+            }
         }
 
         try {
@@ -63,7 +83,7 @@ export default function SignUp() {
                         state: state || null,
                         postal_code: postal_code || null,
                         country: 'Brasil', // Default
-                        referred_by: referralCode || null
+                        referred_by: finalReferralCode || null
                     }
                 },
             });
@@ -92,7 +112,7 @@ export default function SignUp() {
 
                     <div className="text-center mb-8">
                         <h1 className="text-3xl font-black mb-2">Comece Seu Império</h1>
-                        <p className="text-gray-400">7 Dias Grátis. Sem Cartão de Crédito.</p>
+                        <p className="text-gray-400">14 Dias Grátis. Sem Cartão de Crédito.</p>
                         {referralCode && (
                             <div className="mt-3 inline-flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-2 rounded-full text-primary text-sm font-bold">
                                 <Check className="w-4 h-4" /> Código de indicação: <span className="font-black">{referralCode}</span>
@@ -141,6 +161,13 @@ export default function SignUp() {
                                     className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
                                     placeholder="••••••••" />
                             </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-1">Código de Indicação (Opcional)</label>
+                            <input name="referral_code_input" type="text" defaultValue={referralCode}
+                                className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all uppercase"
+                                placeholder="Ex: EMPIRE-4821" />
                         </div>
 
                         {/* OPTIONAL FIELDS TOGGLE */}
@@ -208,7 +235,7 @@ export default function SignUp() {
 
                         {/* TRUST BADGES */}
                         <div className="text-sm text-gray-500 py-1 flex flex-col gap-1">
-                            <div className="flex items-center gap-2"><Check className="w-3 h-3 text-green-500" /><span>7 dias grátis no Plano Básico</span></div>
+                            <div className="flex items-center gap-2"><Check className="w-3 h-3 text-green-500" /><span>14 dias grátis no Plano Básico</span></div>
                             <div className="flex items-center gap-2"><Check className="w-3 h-3 text-green-500" /><span>Cancele quando quiser</span></div>
                         </div>
 

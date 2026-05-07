@@ -9,6 +9,9 @@ create extension if not exists "pgcrypto";
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text,
+  referral_code text unique,
+  referred_by text,
+  referral_count integer default 0,
   created_at timestamp with time zone default now()
 );
 
@@ -110,8 +113,20 @@ with check (auth.uid() = user_id);
 create or replace function public.handle_new_user()
 returns trigger as $$
 begin
-  insert into public.profiles (id, full_name)
-  values (new.id, new.raw_user_meta_data ->> 'full_name');
+  insert into public.profiles (id, full_name, referred_by)
+  values (
+    new.id, 
+    new.raw_user_meta_data ->> 'full_name',
+    new.raw_user_meta_data ->> 'referred_by'
+  );
+
+  -- Increment the referrer's referral_count if a valid referred_by exists
+  if (new.raw_user_meta_data ->> 'referred_by') is not null then
+    update public.profiles
+    set referral_count = referral_count + 1
+    where referral_code = new.raw_user_meta_data ->> 'referred_by';
+  end if;
+
   return new;
 end;
 $$ language plpgsql security definer;

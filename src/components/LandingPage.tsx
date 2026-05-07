@@ -154,7 +154,7 @@ export default function LandingPage() {
                     </div>
 
                     <div className="mt-10 flex items-center justify-center gap-8 text-sm text-gray-600 font-bold">
-                        <div className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" /> 7 dias grátis</div>
+                        <div className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" /> 14 dias grátis</div>
                         <div className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" /> Sem cartão de crédito</div>
                         <div className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" /> Cancele quando quiser</div>
                     </div>
@@ -240,7 +240,7 @@ export default function LandingPage() {
                     <h2 className="text-6xl font-black uppercase tracking-tighter mb-4">
                         Pronto para construir<br />seu império?
                     </h2>
-                    <p className="text-xl text-gray-500 font-bold mb-8">7 dias grátis. Sem cartão de crédito. Setup em 5 minutos.</p>
+                    <p className="text-xl text-gray-500 font-bold mb-8">14 dias grátis. Sem cartão de crédito. Setup em 5 minutos.</p>
                     
                     <div className="mb-6">
                         <span className="inline-block bg-white/5 border border-white/10 text-gray-400 text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full">
