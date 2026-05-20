@@ -78,9 +78,9 @@ export default function StoreProfilePage() {
         const { error } = await upsertSellerProfile(user.id, updates);
 
         if (error) {
-            setToast('Failed to save profile ❌');
+            setToast('Falha ao salvar perfil ❌');
         } else {
-            setToast('Profile saved successfully ✅');
+            setToast('Perfil salvo com sucesso ✅');
             // Optimistic update
             setProfile(prev => ({ ...prev, ...updates }));
         }
@@ -92,7 +92,7 @@ export default function StoreProfilePage() {
     const socialLocked = userPlan === 'starter';
     const isEmpire = userPlan === 'empire';
 
-    if (loading) return <div className="p-8 text-center text-gray-500">Loading Profile...</div>;
+    if (loading) return <div className="p-8 text-center text-gray-500">Carregando Perfil...</div>;
 
     return (
         <div className="p-8 max-w-4xl mx-auto min-h-screen pb-20">
@@ -106,13 +106,13 @@ export default function StoreProfilePage() {
             <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
                     <h1 className="text-4xl font-black text-white mb-2 flex items-center gap-3">
-                        Store Profile <Store className="text-primary w-8 h-8" />
+                        Perfil da Loja <Store className="text-primary w-8 h-8" />
                     </h1>
-                    <p className="text-gray-400">Manage your public brand and customer trust.</p>
+                    <p className="text-gray-400">Gerencie sua marca pública e a confiança dos clientes.</p>
                 </div>
                 {profile.public_slug && (
                     <Link href={`/store/${profile.public_slug}`} target="_blank" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-primary font-bold hover:bg-white/10 transition-colors">
-                        <Globe className="w-4 h-4" /> View Public Page <ExternalLink className="w-3 h-3" />
+                        <Globe className="w-4 h-4" /> Ver Página Pública <ExternalLink className="w-3 h-3" />
                     </Link>
                 )}
             </div>
@@ -121,32 +121,32 @@ export default function StoreProfilePage() {
 
                 {/* 1. BRAND */}
                 <div className="glass-card p-6 border-white/10">
-                    <h3 className="text-xl font-bold text-white mb-4">Brand Identity</h3>
+                    <h3 className="text-xl font-bold text-white mb-4">Identidade da Marca</h3>
                     <div className="grid md:grid-cols-2 gap-6">
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Store Name</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Nome da Loja</label>
                                 <input
                                     type="text"
                                     value={profile.store_name || ''}
                                     onChange={e => setProfile({ ...profile, store_name: e.target.value })}
                                     className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none"
-                                    placeholder="e.g. Neon Dreams"
+                                    placeholder="Ex: Neon Dreams"
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Tagline</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Slogan</label>
                                 <input
                                     type="text"
                                     value={profile.tagline || ''}
                                     onChange={e => setProfile({ ...profile, tagline: e.target.value })}
                                     className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none"
-                                    placeholder="e.g. Future tech for modern pets"
+                                    placeholder="Ex: Tecnologia do futuro para pets modernos"
                                 />
                             </div>
                         </div>
                         <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Logo URL</label>
+                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">URL do Logo</label>
                             <div className="flex gap-4">
                                 <div className="flex-1">
                                     <input
@@ -156,7 +156,7 @@ export default function StoreProfilePage() {
                                         className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none text-sm font-mono"
                                         placeholder="https://..."
                                     />
-                                    <p className="text-[10px] text-gray-500 mt-1">Paste an image URL for now.</p>
+                                    <p className="text-[10px] text-gray-500 mt-1">Cole uma URL de imagem por enquanto.</p>
                                 </div>
                                 <div className="w-20 h-20 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
                                     {profile.logo_url ? <img src={profile.logo_url} className="w-full h-full object-cover" /> : <ImageIcon className="text-gray-600" />}
@@ -168,20 +168,20 @@ export default function StoreProfilePage() {
 
                 {/* 2. ABOUT & CONTACT */}
                 <div className="glass-card p-6 border-white/10">
-                    <h3 className="text-xl font-bold text-white mb-4">About & Contact</h3>
+                    <h3 className="text-xl font-bold text-white mb-4">Sobre & Contato</h3>
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">About Us</label>
+                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Sobre Nós</label>
                             <textarea
                                 value={profile.about_us || ''}
                                 onChange={e => setProfile({ ...profile, about_us: e.target.value })}
                                 className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none h-24"
-                                placeholder="Tell your story..."
+                                placeholder="Conte sua história..."
                             />
                         </div>
                         <div className="grid md:grid-cols-3 gap-6">
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Contact Email</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">E-mail de Contato</label>
                                 <input
                                     type="email"
                                     value={profile.contact_email || ''}
@@ -190,7 +190,7 @@ export default function StoreProfilePage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Phone (Optional)</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Telefone (Opcional)</label>
                                 <input
                                     type="tel"
                                     value={profile.phone || ''}
@@ -199,7 +199,7 @@ export default function StoreProfilePage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Location (Optional)</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Localização (Opcional)</label>
                                 <input
                                     type="text"
                                     value={profile.location || ''}
@@ -217,16 +217,16 @@ export default function StoreProfilePage() {
                         <div className="absolute inset-0 z-10 bg-black/50 backdrop-blur-sm flex items-center justify-center rounded-2xl">
                             <div className="text-center p-6 bg-black border border-primary/30 rounded-xl shadow-[0_0_30px_rgba(0,242,234,0.1)]">
                                 <Lock className="w-8 h-8 text-primary mx-auto mb-2" />
-                                <h3 className="text-lg font-bold text-white">Pro Feature</h3>
-                                <p className="text-gray-400 mb-4 text-sm">Upgrade to add social links to your store.</p>
+                                <h3 className="text-lg font-bold text-white">Recurso Pro</h3>
+                                <p className="text-gray-400 mb-4 text-sm">Faça upgrade para adicionar links sociais à sua loja.</p>
                                 <Link href="/dashboard/billing" className="bg-primary text-black font-bold px-4 py-2 rounded-lg hover:bg-primary/80 transition-colors">
-                                    Upgrade to Pro
+                                    Fazer Upgrade para Pro
                                 </Link>
                             </div>
                         </div>
                     )}
 
-                    <h3 className="text-xl font-bold text-white mb-4">Social Links</h3>
+                    <h3 className="text-xl font-bold text-white mb-4">Links Sociais</h3>
                     <div className="grid md:grid-cols-2 gap-6">
                         {[
                             { label: 'Instagram', key: 'instagram_url', placeholder: 'https://instagram.com/...' },
@@ -253,8 +253,8 @@ export default function StoreProfilePage() {
                 {/* 4. VISIBILITY */}
                 <div className="glass-card p-6 border-white/10 flex items-center justify-between">
                     <div>
-                        <h3 className="text-lg font-bold text-white">Public Visibility</h3>
-                        <p className="text-gray-400 text-sm">Allow customers to view your store profile.</p>
+                        <h3 className="text-lg font-bold text-white">Visibilidade Pública</h3>
+                        <p className="text-gray-400 text-sm">Permita que clientes visualizem o perfil da sua loja.</p>
                     </div>
                     <button
                         onClick={() => setProfile({ ...profile, is_public: !profile.is_public })}
@@ -266,14 +266,14 @@ export default function StoreProfilePage() {
 
                 <div className="flex justify-end gap-4">
                     <button className="px-6 py-3 rounded-xl border border-white/10 text-white font-bold hover:bg-white/5">
-                        Cancel
+                        Cancelar
                     </button>
                     <button
                         onClick={handleSave}
                         disabled={saving}
                         className="px-8 py-3 rounded-xl bg-primary text-black font-bold hover:bg-primary/80 shadow-[0_0_20px_rgba(0,242,234,0.3)] disabled:opacity-50"
                     >
-                        {saving ? 'Saving...' : 'Save Profile'}
+                        {saving ? 'Salvando...' : 'Salvar Perfil'}
                     </button>
                 </div>
 

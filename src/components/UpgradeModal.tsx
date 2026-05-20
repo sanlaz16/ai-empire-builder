@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { X, Zap, Check, Star, ShieldCheck } from 'lucide-react';
+import { X, Zap, Check, Star, ShieldCheck, Video } from 'lucide-react';
 import Link from 'next/link';
 
 interface UpgradeModalProps {
@@ -33,19 +33,19 @@ export const UpgradeModal = ({ isOpen, onClose, featureName }: UpgradeModalProps
                     </div>
 
                     <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">
-                        Unlock {featureName || 'Premium Features'}
+                        Desbloqueie {featureName || 'Recursos Premium'}
                     </h2>
 
                     <p className="text-gray-400 font-bold text-lg max-w-md mb-10 leading-relaxed">
-                        Join the ELITE to scale your empire. Get unlimited imports, AI optimization, and TikTok automation.
+                        Faça upgrade para o ELITE e escale seu império. Importações ilimitadas, otimização com IA e automação TikTok.
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mb-12">
                         {[
-                            { icon: Check, label: "Unlimited Shopify Imports", desc: "No limits on your growth" },
-                            { icon: Star, label: "AI Listing Optimization", desc: "Convert 3x more visitors" },
-                            { icon: Video, label: "TikTok Video Export", desc: "Viral marketing in 1-click" },
-                            { icon: ShieldCheck, label: "Empire Elite Support", desc: "Priority 24/7 assistance" }
+                            { icon: Check, label: "Importações Shopify Ilimitadas", desc: "Sem limites para seu crescimento" },
+                            { icon: Star, label: "Otimização de Listagem com IA", desc: "Converta 3x mais visitantes" },
+                            { icon: Video, label: "Exportação de Vídeo TikTok", desc: "Marketing viral em 1 clique" },
+                            { icon: ShieldCheck, label: "Suporte Elite Empire", desc: "Atendimento prioritário 24/7" }
                         ].map((item, i) => (
                             <div key={i} className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/5 text-left">
                                 <item.icon className="w-5 h-5 text-primary mt-1 shrink-0" />
@@ -63,24 +63,21 @@ export const UpgradeModal = ({ isOpen, onClose, featureName }: UpgradeModalProps
                             onClick={onClose}
                             className="flex-1 py-5 rounded-2xl bg-primary text-black font-black uppercase tracking-[0.2em] hover:scale-[1.02] active:scale-[0.98] transition-all text-center shadow-[0_0_50px_rgba(34,197,94,0.3)]"
                         >
-                            View Plans
+                            Ver Planos
                         </Link>
                         <button
                             onClick={onClose}
                             className="flex-1 py-5 rounded-2xl bg-white/5 border border-white/10 text-white font-black uppercase tracking-[0.2em] hover:bg-white/10 transition-all"
                         >
-                            Maybe Later
+                            Talvez Depois
                         </button>
                     </div>
 
                     <p className="mt-8 text-xs text-gray-600 font-bold uppercase tracking-widest">
-                        Trusted by 5,000+ dropshippers worldwide
+                        Confiado por mais de 5.000 dropshippers no Brasil
                     </p>
                 </div>
             </div>
         </div>
     );
 };
-
-// Internal Import for Video icon which was missing from lucide list above
-import { Video } from 'lucide-react';

@@ -31,7 +31,7 @@ export default function TikTokPostsPage() {
 
         // Optimistic update
         setPosts(prev => prev.map(p => p.id === post.id ? { ...p, status: 'published' } : p));
-        setToast('Published to TikTok Shop (mock) 🚀');
+        setToast('Publicado no TikTok Shop (simulação) 🚀');
         setTimeout(() => setToast(''), 3000);
 
         await updateTikTokPostStatus(user.id, post.id, 'published');
@@ -42,7 +42,7 @@ export default function TikTokPostsPage() {
 
         // Optimistic update
         setPosts(prev => prev.filter(p => p.id !== postId));
-        setToast('Post deleted');
+        setToast('Post excluído');
         setTimeout(() => setToast(''), 2000);
 
         await deleteTikTokPost(user.id, postId);
@@ -83,25 +83,25 @@ export default function TikTokPostsPage() {
                         <span className="h-12 w-12 rounded-xl bg-black border border-[#00f2ea]/30 flex items-center justify-center text-[#ff0050] shadow-lg shadow-[#00f2ea]/10">
                             <Video className="w-6 h-6" />
                         </span>
-                        <span className="bg-gradient-to-r from-[#00f2ea] to-[#ff0050] bg-clip-text text-transparent">My TikTok Posts</span>
+                        <span className="bg-gradient-to-r from-[#00f2ea] to-[#ff0050] bg-clip-text text-transparent">Meus Posts no TikTok</span>
                     </h1>
                     <p className="text-xl text-gray-400">
-                        Manage, publish, and track your TikTok Shop content.
+                        Gerencie, publique e acompanhe seu conteúdo no TikTok Shop.
                     </p>
                 </div>
 
                 {/* FILTERS */}
                 <div className="flex bg-black/40 p-1 rounded-xl border border-white/10">
-                    {['all', 'draft', 'scheduled', 'published'].map((f) => (
+                    {([['all', 'Todos'], ['draft', 'Rascunho'], ['scheduled', 'Agendado'], ['published', 'Publicado']] as const).map(([f, label]) => (
                         <button
                             key={f}
                             onClick={() => setFilter(f as any)}
-                            className={`px-4 py-2 rounded-lg text-sm font-bold capitalize transition-all ${filter === f
+                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${filter === f
                                     ? 'bg-[#00f2ea]/20 text-[#00f2ea] shadow-[0_0_10px_rgba(0,242,234,0.1)]'
                                     : 'text-gray-500 hover:text-white'
                                 }`}
                         >
-                            {f}
+                            {label}
                         </button>
                     ))}
                 </div>
@@ -115,8 +115,8 @@ export default function TikTokPostsPage() {
             ) : filteredPosts.length === 0 ? (
                 <div className="text-center py-20 opacity-50 border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
                     <Video className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-gray-500">No posts found</h3>
-                    <p className="text-gray-600 mt-2">Schedule posts from the Product Finder to see them here.</p>
+                    <h3 className="text-xl font-bold text-gray-500">Nenhum post encontrado</h3>
+                    <p className="text-gray-600 mt-2">Agende posts pelo Buscador de Produtos para vê-los aqui.</p>
                 </div>
             ) : (
                 <div className="space-y-4">
@@ -158,7 +158,7 @@ export default function TikTokPostsPage() {
                                         onClick={() => handlePublish(post)}
                                         className="h-10 px-4 rounded-lg bg-[#ff0050] text-white font-bold hover:bg-[#d60043] transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(255,0,80,0.3)]"
                                     >
-                                        <Send className="w-4 h-4" /> Publish Now
+                                        <Send className="w-4 h-4" /> Publicar Agora
                                     </button>
                                 )}
                                 <button

@@ -98,7 +98,7 @@ const SupplierProductCard = ({ product, onImport, isImporting, plan }: {
 
                 <div className="absolute bottom-2 right-2">
                     <div className="bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-xs font-black text-primary border border-primary/20">
-                        Suggest: ${product.price_suggestion}
+                        Sugerido: R${product.price_suggestion}
                     </div>
                 </div>
             </div>
@@ -109,11 +109,11 @@ const SupplierProductCard = ({ product, onImport, isImporting, plan }: {
 
             <div className="mb-4 grid grid-cols-2 gap-2">
                 <div className="p-2 rounded-lg bg-white/[0.03] border border-white/5">
-                    <div className="text-[10px] uppercase font-black text-gray-500 mb-1">Cost</div>
-                    <div className="text-sm font-black text-white">${product.cost}</div>
+                    <div className="text-[10px] uppercase font-black text-gray-500 mb-1">Custo</div>
+                    <div className="text-sm font-black text-white">R${product.cost}</div>
                 </div>
                 <div className="p-2 rounded-lg bg-primary/5 border border-primary/10">
-                    <div className="text-[10px] uppercase font-black text-primary mb-1">Margin</div>
+                    <div className="text-[10px] uppercase font-black text-primary mb-1">Margem</div>
                     <div className="text-sm font-black text-primary">{margin.toFixed(0)}%</div>
                 </div>
             </div>
@@ -125,11 +125,11 @@ const SupplierProductCard = ({ product, onImport, isImporting, plan }: {
                     className={`w-full py-3 rounded-xl ${isFree ? 'bg-gray-800 text-gray-500 cursor-not-allowed opacity-40' : 'bg-primary text-black hover:scale-[1.02] active:scale-[0.98]'} font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 transition-all disabled:opacity-50`}
                 >
                     {isImporting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
-                    {isFree ? '🔒 Upgrade to Import' : 'Import to Shopify'}
+                    {isFree ? '🔒 Upgrade para Importar' : 'Importar para Shopify'}
                 </button>
                 <div className="grid grid-cols-2 gap-2">
                     <button className="flex-1 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase hover:bg-white/10 transition-all flex items-center justify-center gap-1 opacity-50 cursor-not-allowed">
-                        <Wand2 className="w-3 h-3" /> AI Opt
+                        <Wand2 className="w-3 h-3" /> IA Opt
                     </button>
                     <button className="flex-1 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase hover:bg-white/10 transition-all flex items-center justify-center gap-1 opacity-50 cursor-not-allowed">
                         <Video className="w-3 h-3" /> TikTok
@@ -202,8 +202,8 @@ const ProductCard = ({ product, onPushToStore, onOpenMarketing, plan }: {
             });
             const data = await res.json();
             if (data.success) {
-                alert('Product optimized! Syncing...');
-                onPushToStore(product.id); // Re-sync to show changes
+                alert('Produto otimizado! Sincronizando...');
+                onPushToStore(product.id);
             } else if (data.error && data.error.includes("Quota Exceeded")) {
                 alert(data.error);
             }
@@ -225,7 +225,7 @@ const ProductCard = ({ product, onPushToStore, onOpenMarketing, plan }: {
             const res = await fetch(`/api/tiktok/export?productId=${product.id}`);
             const data = await res.json();
             if (data.success) {
-                alert('TikTok export ready! Check console.');
+                alert('Exportação TikTok pronta! Verifique o console.');
             } else if (data.error && data.error.includes("Quota Exceeded")) {
                 alert(data.error);
             }
@@ -254,15 +254,14 @@ const ProductCard = ({ product, onPushToStore, onOpenMarketing, plan }: {
                 />
 
                 <div className="absolute top-2 left-2 flex gap-2 flex-wrap">
-                    {/* AI BADGES */}
                     {product.aiScore && product.aiScore.overall_score >= 80 && (
                         <div className="bg-red-500 text-white px-2 py-1 rounded-lg text-[10px] font-black flex items-center gap-1 shadow-lg animate-pulse">
-                            <Flame className="w-3 h-3 text-white" /> WINNING
+                            <Flame className="w-3 h-3 text-white" /> VENCEDOR
                         </div>
                     )}
                     {product.supplier_orders && product.supplier_orders > 1000 && (
                         <div className="bg-orange-500 text-white px-2 py-1 rounded-lg text-[10px] font-black flex items-center gap-1 shadow-lg">
-                            <TrendingUp className="w-3 h-3 text-white" /> TOP SELLER
+                            <TrendingUp className="w-3 h-3 text-white" /> TOP VENDAS
                         </div>
                     )}
 
@@ -272,7 +271,7 @@ const ProductCard = ({ product, onPushToStore, onOpenMarketing, plan }: {
 
                     {product.status === 'draft' && (
                         <div className="bg-yellow-500/80 text-black px-2 py-1 rounded-lg text-[10px] font-black shadow-lg">
-                            DRAFT
+                            RASCUNHO
                         </div>
                     )}
                 </div>
@@ -293,68 +292,65 @@ const ProductCard = ({ product, onPushToStore, onOpenMarketing, plan }: {
                 {product.title}
             </h3>
 
-            {/* SUPPLIER INTEL */}
             <div className="mb-4 grid grid-cols-2 gap-2">
                 <div className="p-2 rounded-lg bg-white/[0.03] border border-white/5">
-                    <div className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Cost + Fees</div>
+                    <div className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Custo + Taxas</div>
                     <div className="text-sm font-black text-gray-400">
-                        ${sPrice.toFixed(2)} <span className="text-[9px] opacity-50 text-orange-400">+ Fees</span>
+                        R${sPrice.toFixed(2)} <span className="text-[9px] opacity-50 text-orange-400">+ Taxas</span>
                     </div>
                 </div>
                 <div className="p-2 rounded-lg bg-white/[0.03] border border-white/5">
-                    <div className="text-[9px] text-gray-500 font-bold uppercase tracking-wider text-right">Selling For</div>
-                    <div className="text-sm font-black text-white text-right">${sellPrice.toFixed(2)}</div>
+                    <div className="text-[9px] text-gray-500 font-bold uppercase tracking-wider text-right">Venda Por</div>
+                    <div className="text-sm font-black text-white text-right">R${sellPrice.toFixed(2)}</div>
                 </div>
                 <div className="p-2 rounded-lg bg-green-500/5 border border-green-500/10">
-                    <div className="text-[9px] text-green-500/50 font-bold uppercase tracking-wider">Net Profit</div>
-                    <div className="text-sm font-black text-green-400">${profit.toFixed(2)}</div>
+                    <div className="text-[9px] text-green-500/50 font-bold uppercase tracking-wider">Lucro Líquido</div>
+                    <div className="text-sm font-black text-green-400">R${profit.toFixed(2)}</div>
                 </div>
                 <div className="p-2 rounded-lg bg-blue-500/5 border border-blue-500/10">
-                    <div className="text-[9px] text-blue-500/50 font-bold uppercase tracking-wider text-right">Margin</div>
+                    <div className="text-[9px] text-blue-500/50 font-bold uppercase tracking-wider text-right">Margem</div>
                     <div className="text-sm font-black text-blue-400 text-right">{margin.toFixed(1)}%</div>
                 </div>
             </div>
 
-            {/* LIVE SYNC STATS */}
             {product.supplier_orders && (
                 <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-white/[0.02] border border-white/5 mb-4 text-[10px] font-bold">
                     <div className="flex items-center gap-1.5 text-gray-400">
                         <ShoppingBag className="w-3 h-3 text-orange-400" />
-                        <span>{product.supplier_orders.toLocaleString()}+ Orders</span>
+                        <span>{product.supplier_orders.toLocaleString()}+ Pedidos</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-gray-400">
                         <Layers className="w-3 h-3 text-blue-400" />
-                        <span>{product.supplier_stock?.toLocaleString() || 'In Stock'} Left</span>
+                        <span>{product.supplier_stock?.toLocaleString() || 'Em Estoque'} Restantes</span>
                     </div>
                 </div>
             )}
 
-            {/* ACTIONS */}
             <div className="grid grid-cols-1 gap-2 mt-4">
                 <div className="grid grid-cols-3 gap-2 mb-1">
                     <button
                         onClick={checkMarketingAccess}
                         className="py-2.5 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-400 font-bold text-[10px] uppercase tracking-widest hover:bg-orange-500/20 transition-all flex flex-col items-center justify-center gap-1"
-                        title="Viral Hooks"
+                        title="Ganchos Virais"
                     >
                         <Hash className="w-3 h-3" />
-                        Hooks
+                        Ganchos
                     </button>
                     <button
                         onClick={checkMarketingAccess}
                         className="py-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold text-[10px] uppercase tracking-widest hover:bg-blue-500/20 transition-all flex flex-col items-center justify-center gap-1"
-                        title="Generate Ads"
+                        title="Gerar Anúncios"
                     >
                         <Target className="w-3 h-3" />
-                        Ads
+                        Anúncios
                     </button>
                     <button
                         onClick={checkMarketingAccess}
                         className={`py-2.5 rounded-xl border font-bold text-[10px] uppercase tracking-widest transition-all flex flex-col items-center justify-center gap-1 ${!canOptimize ? 'bg-gray-800/10 border-gray-800/20 text-gray-500 cursor-not-allowed opacity-40' : 'bg-purple-500/10 border-purple-500/20 text-purple-400 hover:bg-purple-500/20'}`}
-                        title="TikTok Script"
+                        title="Roteiro TikTok"
                     >
                         <Mic className="w-3 h-3" />
-                        {!canOptimize ? 'Upgrade' : 'Script'}
+                        {!canOptimize ? 'Upgrade' : 'Roteiro'}
                     </button>
                 </div>
                 <button
@@ -363,7 +359,7 @@ const ProductCard = ({ product, onPushToStore, onOpenMarketing, plan }: {
                     className={`py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${!canOptimize ? 'bg-gray-800 text-gray-500 cursor-not-allowed opacity-40' : 'bg-primary text-black hover:scale-[1.02]'}`}
                 >
                     {isOptimizing ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Wand2 className="w-3 h-3" />}
-                    {!canOptimize ? '🔒 Upgrade to Optimize' : (isOptimizing ? 'Optimizing...' : 'AI Optimize')}
+                    {!canOptimize ? '🔒 Upgrade para Otimizar' : (isOptimizing ? 'Otimizando...' : 'Otimizar com IA')}
                 </button>
                 <div className="grid grid-cols-2 gap-2">
                     <button
@@ -372,7 +368,7 @@ const ProductCard = ({ product, onPushToStore, onOpenMarketing, plan }: {
                         className={`py-2.5 rounded-xl border font-bold text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${!canTikTok ? 'bg-gray-800/10 border-gray-800/20 text-gray-500 cursor-not-allowed opacity-40' : 'bg-white/5 border border-white/10 text-white hover:bg-white/10'}`}
                     >
                         {isExportingTikTok ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Video className="w-3 h-3" />}
-                        {!canTikTok ? 'Upgrade' : (isExportingTikTok ? 'Exporting...' : 'TikTok')}
+                        {!canTikTok ? 'Upgrade' : (isExportingTikTok ? 'Exportando...' : 'TikTok')}
                     </button>
 
                     {(product.status === 'draft' || !product.status) ? (
@@ -385,15 +381,15 @@ const ProductCard = ({ product, onPushToStore, onOpenMarketing, plan }: {
                                 }`}
                         >
                             {isPushing
-                                ? <><RefreshCw className="w-3 h-3 animate-spin" /> Pushing...</>
+                                ? <><RefreshCw className="w-3 h-3 animate-spin" /> Enviando...</>
                                 : pushDone
-                                    ? <><Check className="w-3 h-3" /> Done!</>
-                                    : <><UploadCloud className="w-3 h-3" /> Push</>
+                                    ? <><Check className="w-3 h-3" /> Pronto!</>
+                                    : <><UploadCloud className="w-3 h-3" /> Enviar</>
                             }
                         </button>
                     ) : (
                         <div className="py-2.5 rounded-xl bg-green-500/10 border border-green-500/20 text-green-500 font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2">
-                            <CheckCircle2 className="w-3 h-3" /> Live
+                            <CheckCircle2 className="w-3 h-3" /> Ativo
                         </div>
                     )}
                 </div>
@@ -461,16 +457,15 @@ const MarketingModal = ({ product, onClose }: { product: Product, onClose: () =>
                     <img src={product.imageUrl} className="w-16 h-16 rounded-xl object-cover" />
                     <div>
                         <h3 className="text-xl font-black text-white uppercase tracking-tighter truncate max-w-sm">{product.title}</h3>
-                        <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">Conversion AI Intelligence</p>
+                        <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">IA de Conversão Inteligente</p>
                     </div>
                 </div>
 
-                {/* TABS */}
                 <div className="flex gap-2 mb-8 bg-white/5 p-1 rounded-xl">
                     {[
-                        { id: 'hook', label: 'Viral Hooks', icon: Hash },
-                        { id: 'ad_copy', label: 'Ad Copy', icon: Target },
-                        { id: 'ugc_script', label: 'UGC Script', icon: Mic }
+                        { id: 'hook', label: 'Ganchos Virais', icon: Hash },
+                        { id: 'ad_copy', label: 'Copy do Anúncio', icon: Target },
+                        { id: 'ugc_script', label: 'Roteiro UGC', icon: Mic }
                     ].map((tab) => (
                         <button
                             key={tab.id}
@@ -484,17 +479,16 @@ const MarketingModal = ({ product, onClose }: { product: Product, onClose: () =>
                     ))}
                 </div>
 
-                {/* CONTENT AREA */}
                 <div className="flex-1 overflow-y-auto space-y-6 scrollbar-hide">
                     {!creativeData && !isGenerating && (
                         <div className="flex flex-col items-center justify-center h-full text-center space-y-4 py-10">
                             <Sparkles className="w-12 h-12 text-primary/20" />
-                            <p className="text-gray-500 font-bold text-sm">Generate winning marketing content for this product.</p>
+                            <p className="text-gray-500 font-bold text-sm">Gere conteúdo de marketing vencedor para este produto.</p>
                             <button
                                 onClick={() => generate(activeTab)}
                                 className="px-10 py-4 rounded-xl bg-primary text-black font-black uppercase tracking-widest hover:scale-105 transition-all text-xs"
                             >
-                                Generate Now
+                                Gerar Agora
                             </button>
                         </div>
                     )}
@@ -502,7 +496,7 @@ const MarketingModal = ({ product, onClose }: { product: Product, onClose: () =>
                     {isGenerating && (
                         <div className="flex flex-col items-center justify-center h-full text-center space-y-4 py-10">
                             <RefreshCw className="w-12 h-12 text-primary animate-spin" />
-                            <p className="text-primary font-black text-xs uppercase tracking-widest animate-pulse">AI is writing your creatives...</p>
+                            <p className="text-primary font-black text-xs uppercase tracking-widest animate-pulse">IA está criando seus criativos...</p>
                         </div>
                     )}
 
@@ -525,9 +519,9 @@ const MarketingModal = ({ product, onClose }: { product: Product, onClose: () =>
                     {creativeData && activeTab === 'ad_copy' && (
                         <div className="space-y-6">
                             {[
-                                { label: 'Primary Text', value: creativeData.primary_text },
-                                { label: 'Headline', value: creativeData.headline },
-                                { label: 'Description', value: creativeData.description }
+                                { label: 'Texto Principal', value: creativeData.primary_text },
+                                { label: 'Título', value: creativeData.headline },
+                                { label: 'Descrição', value: creativeData.description }
                             ].map((field, i) => (
                                 <div key={i} className="space-y-2">
                                     <label className="text-[10px] text-gray-500 font-black uppercase tracking-widest">{field.label}</label>
@@ -548,9 +542,9 @@ const MarketingModal = ({ product, onClose }: { product: Product, onClose: () =>
                     {creativeData && activeTab === 'ugc_script' && (
                         <div className="space-y-6">
                             {[
-                                { label: 'The Hook (0-3s)', value: creativeData.hook },
-                                { label: 'The Body', value: creativeData.body },
-                                { label: 'Call to Action', value: creativeData.cta }
+                                { label: 'O Gancho (0-3s)', value: creativeData.hook },
+                                { label: 'O Corpo', value: creativeData.body },
+                                { label: 'Chamada para Ação', value: creativeData.cta }
                             ].map((field, i) => (
                                 <div key={i} className="space-y-2">
                                     <label className="text-[10px] text-gray-500 font-black uppercase tracking-widest">{field.label}</label>
@@ -567,7 +561,7 @@ const MarketingModal = ({ product, onClose }: { product: Product, onClose: () =>
                             ))}
                             {creativeData.notes && (
                                 <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/10 text-[11px] text-blue-400 font-bold italic">
-                                    💡 Pro Tip: {creativeData.notes}
+                                    💡 Dica Pro: {creativeData.notes}
                                 </div>
                             )}
                         </div>
@@ -576,7 +570,7 @@ const MarketingModal = ({ product, onClose }: { product: Product, onClose: () =>
 
                 {copied && (
                     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-green-500 text-black px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest animate-bounce">
-                        Copied to clipboard!
+                        Copiado para a área de transferência!
                     </div>
                 )}
             </div>
@@ -593,15 +587,15 @@ const TemuModal = ({ onClose, onRescan }: { onClose: () => void, onRescan: () =>
                 <X className="w-6 h-6" />
             </button>
             <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-8 flex items-center gap-3">
-                <ShoppingBag className="w-6 h-6 text-primary" /> Temu via DSers Guide
+                <ShoppingBag className="w-6 h-6 text-primary" /> Guia Temu via DSers
             </h3>
             <div className="space-y-6 mb-10">
                 {[
-                    "Open the DSers app in your Shopify Admin.",
-                    "Go to AliExpress, find a product OR copy a Temu product URL.",
-                    "Paste the URL into the DSers Import List.",
-                    "Push the product to your Shopify store.",
-                    "Return here and click 'I Imported Products'."
+                    "Abra o app DSers no seu Admin da Shopify.",
+                    "Vá para o AliExpress, encontre um produto OU copie a URL de um produto Temu.",
+                    "Cole a URL na Lista de Importação do DSers.",
+                    "Envie o produto para sua loja Shopify.",
+                    "Volte aqui e clique em 'Importei os Produtos'."
                 ].map((step, idx) => (
                     <div key={idx} className="flex gap-4 items-start group">
                         <span className="h-8 w-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-primary font-black shrink-0"> {idx + 1} </span>
@@ -610,8 +604,8 @@ const TemuModal = ({ onClose, onRescan }: { onClose: () => void, onRescan: () =>
                 ))}
             </div>
             <div className="flex flex-col gap-4">
-                <a href="https://admin.shopify.com/apps/dsers" target="_blank" className="w-full py-4 rounded-xl bg-white text-black font-black uppercase tracking-widest text-center hover:bg-primary transition-all">Open DSers</a>
-                <button onClick={() => { onRescan(); onClose(); }} className="w-full py-4 rounded-xl bg-primary/10 border border-primary/20 text-primary font-black uppercase tracking-widest hover:bg-primary/20 transition-all">I Imported Products</button>
+                <a href="https://admin.shopify.com/apps/dsers" target="_blank" className="w-full py-4 rounded-xl bg-white text-black font-black uppercase tracking-widest text-center hover:bg-primary transition-all">Abrir DSers</a>
+                <button onClick={() => { onRescan(); onClose(); }} className="w-full py-4 rounded-xl bg-primary/10 border border-primary/20 text-primary font-black uppercase tracking-widest hover:bg-primary/20 transition-all">Importei os Produtos</button>
             </div>
         </div>
     </div>
@@ -633,14 +627,12 @@ export default function ProductFinder() {
     const [wizardSupplier, setWizardSupplier] = useState<'DSers' | 'CJ' | 'Temu' | null>(null);
     const [showTemuModal, setShowTemuModal] = useState(false);
 
-    // AI Check
     const [viewMode, setViewMode] = useState<'store' | 'suppliers'>('store');
     const [supplierProducts, setSupplierProducts] = useState<SupplierProduct[]>([]);
     const [activeSupplier, setActiveSupplier] = useState<string>('All');
     const [activeNiche, setActiveNiche] = useState<string>('All');
     const [isImporting, setIsImporting] = useState<string | null>(null);
 
-    // AI Check & UI States
     const [showOnboarding, setShowOnboarding] = useState(true);
     const [isFirstImport, setIsFirstImport] = useState(false);
     const [isSyncing, setIsSyncing] = useState(false);
@@ -651,7 +643,6 @@ export default function ProductFinder() {
     const { openUpgrade } = useUpgrade();
     const { isUpgradeModalOpen, showUpgradeModal } = useSubscriptionContext();
 
-    // Initial load
     useEffect(() => {
         if (shopifyConnected && viewMode === 'store') {
             loadProducts(1, true);
@@ -696,7 +687,6 @@ export default function ProductFinder() {
         }
     };
 
-    // Infinite scroll via IntersectionObserver
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -721,7 +711,6 @@ export default function ProductFinder() {
             const data = await res.json();
 
             if (data.success) {
-                // NUCLEAR 22: Trigger supplier syncs
                 const suppliers = ['DSers', 'CJ', 'Temu'];
                 for (const supplier of suppliers) {
                     try {
@@ -735,10 +724,9 @@ export default function ProductFinder() {
                     }
                 }
 
-                // Reload products from DB
                 await loadProducts(1, true);
                 if (!silent && data.count > 0) {
-                    setToast(`${data.count} products synced 🚀`);
+                    setToast(`${data.count} produtos sincronizados 🚀`);
                     if (wasEmpty && data.count > 0) {
                         setIsFirstImport(true);
                         setTimeout(() => setIsFirstImport(false), 6000);
@@ -746,7 +734,7 @@ export default function ProductFinder() {
                 }
             }
         } catch (e) {
-            if (!silent) setToast('Rescan failed. Connection error.');
+            if (!silent) setToast('Falha ao re-escanear. Erro de conexão.');
         } finally {
             setIsRescanning(false);
             setIsSyncing(false);
@@ -784,7 +772,7 @@ export default function ProductFinder() {
             return;
         }
         if (!shopifyConnected) {
-            setToast("⚠️ Connect your Shopify store first!");
+            setToast("⚠️ Conecte sua loja Shopify primeiro!");
             setTimeout(() => setToast(''), 4000);
             return;
         }
@@ -811,14 +799,14 @@ export default function ProductFinder() {
                 if (data.alreadyImported) {
                     setToast(`ℹ️ ${data.message}`);
                 } else {
-                    setToast(`Imported! Syncing store... 🚀`);
+                    setToast(`Importado! Sincronizando loja... 🚀`);
                     setIsFirstImport(true);
                     setTimeout(() => setIsFirstImport(false), 6000);
                 }
                 setTimeout(() => setToast(''), 4000);
                 handleRescan(true); // silent rescan
             } else {
-                alert(data.error || "Failed to import product.");
+                alert(data.error || "Falha ao importar produto.");
             }
         } catch (e) {
             console.error("Import failed", e);
@@ -840,7 +828,7 @@ export default function ProductFinder() {
             });
             const data = await res.json();
             if (data.success) {
-                setToast('Product published! 🚀');
+                setToast('Produto publicado! 🚀');
                 setTimeout(() => setToast(''), 3000);
                 // Update product status locally
                 setProducts(prev => prev.map(p =>
@@ -860,9 +848,9 @@ export default function ProductFinder() {
                 <div className="h-24 w-24 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-10">
                     <AlertTriangle className="w-12 h-12 text-yellow-500" />
                 </div>
-                <h1 className="text-5xl font-black text-white uppercase tracking-tighter mb-4">Connect Shopify First</h1>
-                <p className="text-xl text-gray-500 font-bold max-w-lg mb-12">Empire requires a Shopify connection to scan imports and calculate winner margins.</p>
-                <Link href="/dashboard/integrations" className="bg-white text-black px-12 py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-primary transition-all shadow-2xl">Go to Integrations</Link>
+                <h1 className="text-5xl font-black text-white uppercase tracking-tighter mb-4">Conecte a Shopify Primeiro</h1>
+                <p className="text-xl text-gray-500 font-bold max-w-lg mb-12">O Empire requer uma conexão Shopify para escanear importações e calcular margens vencedoras.</p>
+                <Link href="/dashboard/integrations" className="bg-white text-black px-12 py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-primary transition-all shadow-2xl">Ir para Integrações</Link>
             </div>
         );
     }
@@ -902,8 +890,8 @@ export default function ProductFinder() {
                 )}
 
                 <div className="mb-20">
-                    <h1 className="text-6xl font-black text-white uppercase tracking-tighter mb-4">Supplier Import Mode</h1>
-                    <p className="text-xl text-gray-500 font-bold">Your store is empty. Import products from suppliers to begin.</p>
+                    <h1 className="text-6xl font-black text-white uppercase tracking-tighter mb-4">Modo de Importação de Fornecedores</h1>
+                    <p className="text-xl text-gray-500 font-bold">Sua loja está vazia. Importe produtos de fornecedores para começar.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
@@ -912,8 +900,8 @@ export default function ProductFinder() {
                             <Rocket className="w-8 h-8 text-primary" />
                         </div>
                         <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">DSers</h3>
-                        <p className="text-gray-500 font-bold mb-10">Import AliExpress products with 1-click sync.</p>
-                        <button onClick={() => setWizardSupplier('DSers')} className="w-full py-4 bg-white text-black rounded-xl font-black uppercase tracking-widest hover:bg-primary transition-all shadow-xl">Connect DSers</button>
+                        <p className="text-gray-500 font-bold mb-10">Importe produtos do AliExpress com sincronização em 1 clique.</p>
+                        <button onClick={() => setWizardSupplier('DSers')} className="w-full py-4 bg-white text-black rounded-xl font-black uppercase tracking-widest hover:bg-primary transition-all shadow-xl">Conectar DSers</button>
                     </div>
 
                     <div className="glass-card p-10 border-white/10 hover:border-primary/40 transition-all group shrink-0 w-80 md:w-auto">
@@ -921,8 +909,8 @@ export default function ProductFinder() {
                             <Sparkles className="w-8 h-8 text-primary" />
                         </div>
                         <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">CJ Dropshipping</h3>
-                        <p className="text-gray-500 font-bold mb-10">Exclusive fast-shipping items and global sourcing.</p>
-                        <button onClick={() => setWizardSupplier('CJ')} className="w-full py-4 bg-white text-black rounded-xl font-black uppercase tracking-widest hover:bg-primary transition-all shadow-xl">Connect CJ</button>
+                        <p className="text-gray-500 font-bold mb-10">Itens exclusivos com envio rápido e fornecimento global.</p>
+                        <button onClick={() => setWizardSupplier('CJ')} className="w-full py-4 bg-white text-black rounded-xl font-black uppercase tracking-widest hover:bg-primary transition-all shadow-xl">Conectar CJ</button>
                     </div>
 
                     <div className="glass-card p-10 border-white/10 hover:border-primary/40 transition-all group shrink-0 w-80 md:w-auto">
@@ -930,20 +918,20 @@ export default function ProductFinder() {
                             <ShoppingBag className="w-8 h-8 text-primary" />
                         </div>
                         <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">Temu via DSers</h3>
-                        <p className="text-gray-500 font-bold mb-10">Manual link import via DSers AliExpress list.</p>
-                        <button onClick={() => setWizardSupplier('Temu')} className="w-full py-4 bg-white text-black rounded-xl font-black uppercase tracking-widest hover:bg-primary transition-all shadow-xl">Import from Temu</button>
+                        <p className="text-gray-500 font-bold mb-10">Importação manual de links via lista AliExpress do DSers.</p>
+                        <button onClick={() => setWizardSupplier('Temu')} className="w-full py-4 bg-white text-black rounded-xl font-black uppercase tracking-widest hover:bg-primary transition-all shadow-xl">Importar do Temu</button>
                     </div>
                 </div>
 
                 <div className="flex flex-col items-center gap-6 p-12 glass-card border-primary/20 bg-primary/5 rounded-[3rem]">
-                    <h2 className="text-2xl font-black text-white uppercase tracking-widest">Finished Sourcing?</h2>
+                    <h2 className="text-2xl font-black text-white uppercase tracking-widest">Terminou de Buscar?</h2>
                     <button
                         onClick={() => handleRescan()}
                         disabled={isRescanning}
                         className="px-16 py-6 rounded-2xl bg-primary text-black font-black uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-[0_0_50px_rgba(34,197,94,0.3)] flex items-center gap-4 text-xl"
                     >
                         {isRescanning ? <RefreshCw className="w-6 h-6 animate-spin" /> : <Layers className="w-6 h-6" />}
-                        I Imported Products
+                        Importei os Produtos
                     </button>
                 </div>
             </div>
@@ -960,15 +948,15 @@ export default function ProductFinder() {
                             <Rocket className="w-8 h-8" />
                         </div>
                         <div>
-                            <h4 className="text-xl font-black text-white uppercase tracking-tight">Free Plan: Explorer Mode</h4>
-                            <p className="text-gray-400 font-bold">Upgrade to unlock Import to Shopify, AI Product Optimization, and TikTok Video Export.</p>
+                            <h4 className="text-xl font-black text-white uppercase tracking-tight">Plano Gratuito: Modo Explorador</h4>
+                            <p className="text-gray-400 font-bold">Faça upgrade para desbloquear Importação Shopify, Otimização de Produto com IA e Exportação de Vídeo TikTok.</p>
                         </div>
                     </div>
                     <button
                         onClick={openUpgrade}
                         className="px-10 py-4 rounded-xl bg-primary text-black font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl whitespace-nowrap"
                     >
-                        See Pro Plans
+                        Ver Planos Pro
                     </button>
                 </div>
             )}
@@ -985,7 +973,7 @@ export default function ProductFinder() {
             {isSyncing && (
                 <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[100] bg-black/90 text-white px-8 py-3 rounded-full border border-white/10 flex items-center gap-3 shadow-2xl backdrop-blur-md">
                     <RefreshCw className="w-4 h-4 animate-spin text-primary" />
-                    <span className="font-bold text-sm uppercase tracking-widest">Syncing products...</span>
+                    <span className="font-bold text-sm uppercase tracking-widest">Sincronizando produtos...</span>
                 </div>
             )}
 
@@ -996,8 +984,8 @@ export default function ProductFinder() {
                         <CheckCircle2 className="w-6 h-6 text-green-400" />
                     </div>
                     <div>
-                        <h3 className="text-white font-black">Product imported successfully 🎉</h3>
-                        <p className="text-green-400 text-sm font-bold">You can now optimize and sell. Use "AI Optimize" and "Push to Store".</p>
+                        <h3 className="text-white font-black">Produto importado com sucesso! 🎉</h3>
+                        <p className="text-green-400 text-sm font-bold">Agora você pode otimizar e vender. Use "Otimizar com IA" e "Enviar para Loja".</p>
                     </div>
                 </div>
             )}
@@ -1009,13 +997,13 @@ export default function ProductFinder() {
                         onClick={() => setViewMode('store')}
                         className={`px-8 py-3 rounded-xl font-black uppercase tracking-widest text-xs transition-all flex items-center gap-2 ${viewMode === 'store' ? 'bg-primary text-black shadow-[0_0_20px_rgba(34,197,94,0.3)]' : 'text-gray-400 hover:text-white'}`}
                     >
-                        <ShoppingBag className="w-4 h-4" /> My Store
+                        <ShoppingBag className="w-4 h-4" /> Minha Loja
                     </button>
                     <button
                         onClick={() => setViewMode('suppliers')}
                         className={`px-8 py-3 rounded-xl font-black uppercase tracking-widest text-xs transition-all flex items-center gap-2 ${viewMode === 'suppliers' ? 'bg-primary text-black shadow-[0_0_20px_rgba(34,197,94,0.3)]' : 'text-gray-400 hover:text-white'}`}
                     >
-                        <Globe className="w-4 h-4" /> Suppliers
+                        <Globe className="w-4 h-4" /> Fornecedores
                     </button>
                 </div>
             </div>
@@ -1025,18 +1013,18 @@ export default function ProductFinder() {
                 <div>
                     <h1 className="text-6xl font-black mb-4 text-white uppercase tracking-tighter flex items-center gap-5">
                         <Zap className="w-12 h-12 text-primary" />
-                        {viewMode === 'store' ? 'Product Finder' : 'Supplier Discovery'}
+                        {viewMode === 'store' ? 'Busca de Produtos' : 'Descoberta de Fornecedores'}
                     </h1>
                     <div className="flex items-center gap-6">
                         <p className="text-xl text-gray-500 font-bold">
                             {viewMode === 'store'
-                                ? <>Scanning <span className="text-white">{products.length} products</span>.</>
-                                : <>Discovering <span className="text-white">{supplierProducts.length} top products</span>.</>
+                                ? <>Escaneando <span className="text-white">{products.length} produtos</span>.</>
+                                : <>Descobrindo <span className="text-white">{supplierProducts.length} top produtos</span>.</>
                             }
                         </p>
                         {viewMode === 'store' && (
                             <button onClick={() => handleRescan()} disabled={isRescanning} className="text-[11px] font-black uppercase text-primary border-b border-primary/20 hover:border-primary transition-all flex items-center gap-2">
-                                {isRescanning ? <RefreshCw className="w-3 h-3 animate-spin" /> : null} Rescan Store
+                                {isRescanning ? <RefreshCw className="w-3 h-3 animate-spin" /> : null} Re-escanear Loja
                             </button>
                         )}
                     </div>
@@ -1047,7 +1035,7 @@ export default function ProductFinder() {
                     <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within:text-primary transition-colors" />
                     <input
                         type="text"
-                        placeholder={viewMode === 'store' ? "Search your store..." : "Search global suppliers..."}
+                        placeholder={viewMode === 'store' ? "Buscar na sua loja..." : "Buscar fornecedores globais..."}
                         className="w-full lg:w-80 pl-14 pr-6 py-4 rounded-2xl bg-white/[0.04] border border-white/8 text-white placeholder-gray-600 focus:outline-none focus:border-primary/50 transition-all font-bold"
                         value={query}
                         onChange={(e) => handleSearch(e.target.value)}
@@ -1060,7 +1048,7 @@ export default function ProductFinder() {
             {viewMode === 'suppliers' && (
                 <div className="flex flex-wrap gap-6 mb-8 p-6 bg-white/[0.02] border border-white/5 rounded-3xl items-center">
                     <div className="flex items-center gap-4">
-                        <span className="text-[10px] font-black uppercase text-gray-500 tracking-widest">Provider:</span>
+                        <span className="text-[10px] font-black uppercase text-gray-500 tracking-widest">Fornecedor:</span>
                         <div className="flex gap-2">
                             {['All', 'DSers', 'CJ', 'Temu'].map(s => (
                                 <button
@@ -1076,7 +1064,7 @@ export default function ProductFinder() {
                     <div className="flex items-center gap-4 lg:ml-auto">
                         <span className="text-[10px] font-black uppercase text-gray-500 tracking-widest">Niche:</span>
                         <div className="flex gap-2">
-                            {['All', 'Pets', 'Beauty', 'Fitness'].map(n => (
+                            {['Todos', 'Pets', 'Beleza', 'Fitness'].map(n => (
                                 <button
                                     key={n}
                                     onClick={() => setActiveNiche(n)}
@@ -1166,11 +1154,11 @@ export default function ProductFinder() {
                 {isLoadingMore && (
                     <div className="flex items-center gap-3 text-gray-500">
                         <RefreshCw className="w-5 h-5 animate-spin" />
-                        <span className="font-bold">Loading more products...</span>
+                        <span className="font-bold">Carregando mais produtos...</span>
                     </div>
                 )}
                 {!hasMore && products.length > 0 && (
-                    <p className="text-gray-700 font-bold text-sm">All {products.length} products loaded.</p>
+                    <p className="text-gray-700 font-bold text-sm">Todos os {products.length} produtos carregados.</p>
                 )}
             </div>
 
@@ -1178,7 +1166,7 @@ export default function ProductFinder() {
             <UpgradeModal
                 isOpen={isUpgradeModalOpen}
                 onClose={() => showUpgradeModal(false)}
-                featureName="Premium Feature"
+                featureName="Recurso Premium"
             />
         </div>
     );

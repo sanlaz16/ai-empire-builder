@@ -15,26 +15,26 @@ export default function MyNiches() {
             const defaults = [
                 {
                     id: 1,
-                    name: 'Cyberpunk Pet Accessories',
-                    audience: 'Tech-savvy pet owners',
-                    date: 'Oct 24, 2024',
-                    status: 'Live',
+                    name: 'Acessórios Pet Cyberpunk',
+                    audience: 'Donos de pets antenados em tecnologia',
+                    date: '24 out. 2024',
+                    status: 'Ativo',
                     statusColor: 'text-green-400 bg-green-500/10 border-green-500/20'
                 },
                 {
                     id: 2,
-                    name: 'Eco-Friendly Yoga Mats',
-                    audience: 'Women 25-40, Sustainability focused',
-                    date: 'Dec 02, 2024',
-                    status: 'Draft',
+                    name: 'Tapetes de Yoga Ecológicos',
+                    audience: 'Mulheres 25-40, foco em sustentabilidade',
+                    date: '02 dez. 2024',
+                    status: 'Rascunho',
                     statusColor: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20'
                 },
                 {
                     id: 3,
-                    name: 'Minimalist Desk Setups',
-                    audience: 'Remote workers, Developers',
-                    date: 'Dec 06, 2024',
-                    status: 'Analyzing',
+                    name: 'Setups Minimalistas de Mesa',
+                    audience: 'Trabalhadores remotos, Desenvolvedores',
+                    date: '06 dez. 2024',
+                    status: 'Analisando',
                     statusColor: 'text-primary bg-primary/10 border-primary/20 animate-pulse'
                 }
             ];
@@ -44,7 +44,7 @@ export default function MyNiches() {
     }, []);
 
     const handleAddNiche = () => {
-        alert("Use the AI Store Builder to create a new niche. Future versions will let you save and edit them here.");
+        alert("Use o Criador de Loja com IA para criar um novo nicho. Em versões futuras você poderá salvar e editar nichos aqui.");
     };
 
     return (
@@ -55,9 +55,9 @@ export default function MyNiches() {
                         <span className="bg-primary/20 p-2 rounded-lg text-primary">
                             <Layers className="w-6 h-6" />
                         </span>
-                        My Niches
+                        Meus Nichos
                     </h1>
-                    <p className="text-gray-400">Manage your generated market segments and store concepts.</p>
+                    <p className="text-gray-400">Gerencie seus segmentos de mercado gerados e conceitos de loja.</p>
                 </div>
 
                 <button
@@ -65,7 +65,7 @@ export default function MyNiches() {
                     className="btn btn-primary px-6 py-3 flex items-center gap-2 group"
                 >
                     <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform" />
-                    <span>Add New Niche</span>
+                    <span>Adicionar Novo Nicho</span>
                 </button>
             </div>
 
@@ -96,7 +96,7 @@ export default function MyNiches() {
                                 </div>
 
                                 <div className={`px-3 py-1 rounded-full border text-xs font-bold flex items-center gap-2 ${niche.statusColor}`}>
-                                    {niche.status === 'Live' && <CheckCircle2 className="w-3 h-3" />}
+                                    {niche.status === 'Ativo' && <CheckCircle2 className="w-3 h-3" />}
                                     {niche.status}
                                 </div>
                             </div>
@@ -117,9 +117,9 @@ export default function MyNiches() {
 
             {/* Empty State / Upsell */}
             <div className="mt-8 border border-dashed border-white/10 rounded-2xl p-12 text-center bg-white/[0.01]">
-                <p className="text-gray-500 mb-4">Want to dominate more markets?</p>
+                <p className="text-gray-500 mb-4">Quer dominar mais mercados?</p>
                 <div className="inline-flex items-center gap-2 text-primary text-sm font-bold uppercase tracking-wider cursor-pointer hover:underline">
-                    Generate Next Niche <ArrowUpRight className="w-4 h-4" />
+                    Gerar Próximo Nicho <ArrowUpRight className="w-4 h-4" />
                 </div>
             </div>
         </div>

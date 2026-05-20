@@ -48,9 +48,9 @@ export default function PerformancePage() {
             <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
                     <h1 className="text-4xl font-black text-white mb-2 flex items-center gap-3">
-                        Performance <Activity className="text-primary w-8 h-8" />
+                        Desempenho <Activity className="text-primary w-8 h-8" />
                     </h1>
-                    <p className="text-gray-400">Track your sales, products, and AI-powered insights.</p>
+                    <p className="text-gray-400">Acompanhe suas vendas, produtos e insights com IA.</p>
                 </div>
                 <div className="flex bg-white/5 p-1 rounded-xl">
                     {(['7d', '14d', '30d'] as const).map((r) => (
@@ -73,7 +73,7 @@ export default function PerformancePage() {
                         <div className="text-3xl font-black text-white mb-2">{kpi.value}</div>
                         <div className={`flex items-center text-xs font-bold ${kpi.trendDirection === 'up' ? 'text-green-400' : 'text-red-400'}`}>
                             {kpi.trendDirection === 'up' ? <ArrowUp className="w-3 h-3 mr-1" /> : <ArrowDown className="w-3 h-3 mr-1" />}
-                            {kpi.trend}% vs last period
+                            {kpi.trend}% vs período anterior
                         </div>
                     </div>
                 ))}
@@ -86,10 +86,10 @@ export default function PerformancePage() {
                 <div className="lg:col-span-2 glass-card p-6 border-white/10 flex flex-col">
                     <div className="mb-6 flex justify-between items-center">
                         <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                            Revenue Trend <TrendingUp className="w-5 h-5 text-green-400" />
+                            Tendência de Receita <TrendingUp className="w-5 h-5 text-green-400" />
                         </h3>
                         <span className="text-xs text-green-400 bg-green-500/10 px-2 py-1 rounded border border-green-500/20">
-                            Live Estimate
+                            Estimativa ao Vivo
                         </span>
                     </div>
                     <div className="flex-1 min-h-[300px]">
@@ -103,9 +103,9 @@ export default function PerformancePage() {
                 <div className="glass-card p-0 overflow-hidden border-purple-500/30 flex flex-col">
                     <div className="p-6 bg-purple-500/10 border-b border-purple-500/20">
                         <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                            AI Insights <Sparkles className="w-5 h-5 text-purple-400" />
+                            Insights de IA <Sparkles className="w-5 h-5 text-purple-400" />
                         </h3>
-                        <p className="text-xs text-gray-400 mt-1">Optimization opportunities detected</p>
+                        <p className="text-xs text-gray-400 mt-1">Oportunidades de otimização detectadas</p>
                     </div>
                     <div className="p-6 space-y-4 flex-1 overflow-y-auto max-h-[400px]">
                         {loading ? <div className="space-y-4">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-white/5 animate-pulse rounded-xl" />)}</div> : insights.map((insight) => (
@@ -138,16 +138,16 @@ export default function PerformancePage() {
             <div className="grid lg:grid-cols-3 gap-8">
                 {/* LEFT: TOP PRODUCTS (2/3) */}
                 <div className="lg:col-span-2 glass-card p-6 border-white/10">
-                    <h3 className="text-xl font-bold text-white mb-6">Top Performing Products</h3>
+                    <h3 className="text-xl font-bold text-white mb-6">Produtos com Melhor Desempenho</h3>
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="text-xs font-bold text-gray-500 uppercase border-b border-white/10">
-                                    <th className="pb-3 pl-2">Product</th>
-                                    <th className="pb-3 text-right">Units</th>
-                                    <th className="pb-3 text-right">Revenue</th>
-                                    <th className="pb-3 text-center">Trend</th>
-                                    <th className="pb-3 text-right">Actions</th>
+                                    <th className="pb-3 pl-2">Produto</th>
+                                    <th className="pb-3 text-right">Unidades</th>
+                                    <th className="pb-3 text-right">Receita</th>
+                                    <th className="pb-3 text-center">Tendência</th>
+                                    <th className="pb-3 text-right">Ações</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
@@ -164,7 +164,7 @@ export default function PerformancePage() {
                                         </td>
                                         <td className="py-4 text-right">
                                             <button className="text-xs font-bold text-primary hover:text-white border border-primary/30 hover:bg-primary/10 px-3 py-1.5 rounded-lg transition-all">
-                                                Analyze
+                                                Analisar
                                             </button>
                                         </td>
                                     </tr>
@@ -173,7 +173,7 @@ export default function PerformancePage() {
                         </table>
                         {topProducts.length === 0 && !loading && (
                             <div className="text-center py-10 text-gray-500">
-                                No products found. Add products to see analytics.
+                                Nenhum produto encontrado. Adicione produtos para ver as análises.
                             </div>
                         )}
                     </div>
@@ -181,25 +181,25 @@ export default function PerformancePage() {
 
                 {/* RIGHT: QUICK ACTIONS (1/3) */}
                 <div className="glass-card p-6 border-white/10 flex flex-col justify-center">
-                    <h3 className="text-xl font-bold text-white mb-6">Quick Actions</h3>
+                    <h3 className="text-xl font-bold text-white mb-6">Ações Rápidas</h3>
                     <div className="space-y-4">
                         <QuickAction
                             href="/dashboard/product-finder"
                             icon={<Sparkles className="w-5 h-5 text-purple-400" />}
-                            title="Generate AI Content"
-                            desc="Create thumbnails or scripts"
+                            title="Gerar Conteúdo com IA"
+                            desc="Crie miniaturas ou scripts"
                         />
                         <QuickAction
                             href="/dashboard/tiktok-posts"
                             icon={<Video className="w-5 h-5 text-[#00f2ea]" />}
-                            title="Schedule TikTok"
-                            desc="Manage upcoming posts"
+                            title="Agendar TikTok"
+                            desc="Gerencie publicações futuras"
                         />
                         <QuickAction
                             href="/dashboard/trends"
                             icon={<Zap className="w-5 h-5 text-orange-400" />}
-                            title="Viral Radar"
-                            desc="Spot new trends early"
+                            title="Radar Viral"
+                            desc="Descubra novas tendências cedo"
                         />
                     </div>
                 </div>

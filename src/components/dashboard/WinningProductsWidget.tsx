@@ -44,13 +44,13 @@ export default function WinningProductsWidget() {
         fetchWinners();
     }, []);
 
-    if (loading) return <div className="h-48 flex items-center justify-center text-gray-500 font-bold uppercase tracking-widest text-xs">AI Scanning for Winners...</div>;
+    if (loading) return <div className="h-48 flex items-center justify-center text-gray-500 font-bold uppercase tracking-widest text-xs">IA Buscando Produtos Vencedores...</div>;
 
     if (winners.length === 0) return (
         <div className="p-6 text-center border border-white/5 rounded-2xl bg-white/[0.02]">
-            <p className="text-gray-500 font-bold text-sm mb-4">No winning products detected yet.</p>
+            <p className="text-gray-500 font-bold text-sm mb-4">Nenhum produto vencedor detectado ainda.</p>
             <Link href="/dashboard/product-finder" className="text-primary text-xs font-black uppercase tracking-widest hover:underline">
-                Start Scanning →
+                Começar a Buscar →
             </Link>
         </div>
     );
@@ -75,7 +75,7 @@ export default function WinningProductsWidget() {
                 </div>
             ))}
             <Link href="/dashboard/product-finder" className="flex items-center justify-center gap-2 py-3 w-full rounded-xl border border-white/10 text-gray-500 hover:text-white hover:bg-white/5 transition-all text-xs font-bold uppercase tracking-widest">
-                View All Winners <ArrowRight className="w-3 h-3" />
+                Ver Todos os Vencedores <ArrowRight className="w-3 h-3" />
             </Link>
         </div>
     );

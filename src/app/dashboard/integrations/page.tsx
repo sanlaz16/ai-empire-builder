@@ -75,10 +75,10 @@ export default function IntegrationsPage() {
                     <span className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-lg shadow-primary/20">
                         <LinkIcon className="w-6 h-6" />
                     </span>
-                    <span className="gradient-text">Integrations</span>
+                    <span className="gradient-text">Integrações</span>
                 </h1>
                 <p className="text-xl text-gray-400 max-w-2xl">
-                    Connect your external platforms to synchronize products and automate fulfillment.
+                    Conecte suas plataformas externas para sincronizar produtos e automatizar o atendimento.
                 </p>
             </div>
 
@@ -97,16 +97,16 @@ export default function IntegrationsPage() {
                             </div>
                             <div>
                                 <h3 className="text-2xl font-bold text-white">Shopify</h3>
-                                <p className="text-gray-400 text-sm">E-Commerce Platform</p>
+                                <p className="text-gray-400 text-sm">Plataforma de E-Commerce</p>
                             </div>
                         </div>
                         <div className={`px-3 py-1 rounded-full text-xs font-bold border ${shopifyConnected ? 'bg-green-500/20 text-green-400 border-green-500/30' : 'bg-gray-800 text-gray-400 border-gray-700'}`}>
-                            {shopifyConnected ? shopifyDomain || 'Active' : 'Not Connected'}
+                            {shopifyConnected ? shopifyDomain || 'Ativo' : 'Não Conectado'}
                         </div>
                     </div>
 
                     <p className="text-gray-400 mb-8 relative z-10 h-12">
-                        Connect your real store to synchronize products, fulfill orders, and optimize listings with IA.
+                        Conecte sua loja real para sincronizar produtos, processar pedidos e otimizar listagens com IA.
                     </p>
 
                     <div className="relative z-10">
@@ -115,14 +115,14 @@ export default function IntegrationsPage() {
                                 onClick={disconnectShopify}
                                 className="w-full py-4 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/10 font-bold transition-all"
                             >
-                                Disconnect Store
+                                Desconectar Loja
                             </button>
                         ) : (
                             <button
                                 onClick={() => setShowShopifyModal(true)}
                                 className="w-full py-4 rounded-xl bg-[#95BF47] text-black font-bold hover:bg-[#85AB3E] transition-all shadow-[0_0_20px_rgba(149,191,71,0.3)]"
                             >
-                                Connect Shopify
+                                Conectar Shopify
                             </button>
                         )}
                     </div>
@@ -141,16 +141,16 @@ export default function IntegrationsPage() {
                             </div>
                             <div>
                                 <h3 className="text-2xl font-bold text-white">Amazon Affiliate</h3>
-                                <p className="text-gray-400 text-sm">Affiliate Revenue</p>
+                                <p className="text-gray-400 text-sm">Receita de Afiliado</p>
                             </div>
                         </div>
                         <div className={`px-3 py-1 rounded-full text-xs font-bold border ${amazonConnected ? 'bg-green-500/20 text-green-400 border-green-500/30' : 'bg-gray-800 text-gray-400 border-gray-700'}`}>
-                            {amazonConnected ? 'Active' : 'Not Connected'}
+                            {amazonConnected ? 'Ativo' : 'Não Conectado'}
                         </div>
                     </div>
 
                     <p className="text-gray-400 mb-8 relative z-10 h-12">
-                        Generate affiliate links automatically for finding products. Monetize your research flow.
+                        Gere links de afiliado automaticamente para encontrar produtos. Monetize seu fluxo de pesquisa.
                     </p>
 
                     <div className="relative z-10">
@@ -159,14 +159,14 @@ export default function IntegrationsPage() {
                                 onClick={disconnectAmazon}
                                 className="w-full py-4 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/10 font-bold transition-all"
                             >
-                                Disconnect ID
+                                Desconectar ID
                             </button>
                         ) : (
                             <button
                                 onClick={() => setShowAmazonModal(true)}
                                 className="w-full py-4 rounded-xl bg-[#FF9900] text-black font-bold hover:bg-[#E68A00] transition-all shadow-[0_0_20px_rgba(255,153,0,0.3)]"
                             >
-                                Connect Amazon
+                                Conectar Amazon
                             </button>
                         )}
                     </div>
@@ -185,16 +185,16 @@ export default function IntegrationsPage() {
                             </div>
                             <div>
                                 <h3 className="text-2xl font-bold text-white">TikTok Shop</h3>
-                                <p className="text-gray-400 text-sm">Viral Commerce</p>
+                                <p className="text-gray-400 text-sm">Comércio Viral</p>
                             </div>
                         </div>
                         <div className={`px-3 py-1 rounded-full text-xs font-bold border ${tikTokConnected ? 'bg-green-500/20 text-green-400 border-green-500/30' : 'bg-gray-800 text-gray-400 border-gray-700'}`}>
-                            {tikTokConnected ? 'Active' : 'Not Connected'}
+                            {tikTokConnected ? 'Ativo' : 'Não Conectado'}
                         </div>
                     </div>
 
                     <p className="text-gray-400 mb-8 relative z-10 h-12">
-                        Export products and generate TikTok-ready metadata using AI.
+                        Exporte produtos e gere metadados prontos para o TikTok usando IA.
                     </p>
 
                     <div className="relative z-10">
@@ -203,14 +203,14 @@ export default function IntegrationsPage() {
                                 onClick={disconnectTikTok}
                                 className="w-full py-4 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/10 font-bold transition-all"
                             >
-                                Disconnect Shop
+                                Desconectar Loja
                             </button>
                         ) : (
                             <button
                                 onClick={() => setShowTikTokModal(true)}
                                 className="w-full py-4 rounded-xl bg-black text-white border border-[#00f2ea]/50 font-bold hover:bg-[#00f2ea]/10 transition-all shadow-[0_0_20px_rgba(0,242,234,0.3)]"
                             >
-                                Connect TikTok
+                                Conectar TikTok
                             </button>
                         )}
                     </div>
@@ -235,13 +235,13 @@ export default function IntegrationsPage() {
                             <div className="w-16 h-16 bg-[#95BF47]/20 rounded-xl flex items-center justify-center mx-auto mb-4 border border-[#95BF47]/30">
                                 <ShoppingBag className="w-8 h-8 text-[#95BF47]" />
                             </div>
-                            <h2 className="text-2xl font-bold text-white">Connect Shopify</h2>
-                            <p className="text-sm text-gray-400 mt-2">Enter your store details to enable mock sync.</p>
+                            <h2 className="text-2xl font-bold text-white">Conectar Shopify</h2>
+                            <p className="text-sm text-gray-400 mt-2">Insira os dados da sua loja para sincronizar.</p>
                         </div>
 
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Store URL</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">URL da Loja</label>
                                 <input
                                     type="text"
                                     placeholder="my-store.myshopify.com"
@@ -259,9 +259,9 @@ export default function IntegrationsPage() {
                                 className="w-full py-3 rounded-lg bg-[#95BF47] text-black font-bold hover:bg-[#85AB3E] transition-all flex items-center justify-center gap-2"
                             >
                                 {isShopifyConnecting ? (
-                                    <>Redirecting...</>
+                                    <>Redirecionando...</>
                                 ) : (
-                                    <>Connect via Shopify OAuth</>
+                                    <>Conectar via Shopify OAuth</>
                                 )}
                             </button>
                         </div>
@@ -285,8 +285,8 @@ export default function IntegrationsPage() {
                             <div className="w-16 h-16 bg-[#FF9900]/20 rounded-xl flex items-center justify-center mx-auto mb-4 border border-[#FF9900]/30">
                                 <Globe className="w-8 h-8 text-[#FF9900]" />
                             </div>
-                            <h2 className="text-2xl font-bold text-white">Connect Amazon</h2>
-                            <p className="text-sm text-gray-400 mt-2">Enable affiliate link generation.</p>
+                            <h2 className="text-2xl font-bold text-white">Conectar Amazon</h2>
+                            <p className="text-sm text-gray-400 mt-2">Habilitar geração de links de afiliado.</p>
                         </div>
 
                         <div className="space-y-4">
@@ -301,7 +301,7 @@ export default function IntegrationsPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Tracking Code (Optional)</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Código de Rastreamento (Opcional)</label>
                                 <input
                                     type="text"
                                     placeholder="campaign_1"
@@ -319,9 +319,9 @@ export default function IntegrationsPage() {
                                 className="w-full py-3 rounded-lg bg-[#FF9900] text-black font-bold hover:bg-[#E68A00] transition-all flex items-center justify-center gap-2"
                             >
                                 {isAmazonConnecting ? (
-                                    <>Verifying...</>
+                                    <>Verificando...</>
                                 ) : (
-                                    <>Simulate Connection</>
+                                    <>Simular Conexão</>
                                 )}
                             </button>
                         </div>
@@ -344,8 +344,8 @@ export default function IntegrationsPage() {
                             <div className="w-16 h-16 bg-[#000000] rounded-xl flex items-center justify-center mx-auto mb-4 border border-[#00f2ea]/30 shadow-[0_0_15px_rgba(0,242,234,0.3)]">
                                 <Video className="w-8 h-8 text-[#ff0050]" />
                             </div>
-                            <h2 className="text-2xl font-bold text-white">Connect TikTok Shop</h2>
-                            <p className="text-sm text-gray-400 mt-2">Unlock viral commerce potential.</p>
+                            <h2 className="text-2xl font-bold text-white">Conectar TikTok Shop</h2>
+                            <p className="text-sm text-gray-400 mt-2">Desbloqueie o potencial do comércio viral.</p>
                         </div>
 
                         <div className="space-y-4">
@@ -360,7 +360,7 @@ export default function IntegrationsPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Access Token (Mock)</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Token de Acesso (Mock)</label>
                                 <div className="relative">
                                     <Lock className="w-4 h-4 text-gray-500 absolute left-3 top-3.5" />
                                     <input
@@ -379,10 +379,10 @@ export default function IntegrationsPage() {
                                     value={tikTokRegion}
                                     onChange={(e) => setTikTokRegion(e.target.value)}
                                 >
-                                    <option value="US">United States (US)</option>
-                                    <option value="UK">United Kingdom (UK)</option>
-                                    <option value="EU">Europe (EU)</option>
-                                    <option value="BR">Brazil (BR)</option>
+                                    <option value="US">Estados Unidos (US)</option>
+                                    <option value="UK">Reino Unido (UK)</option>
+                                    <option value="EU">Europa (EU)</option>
+                                    <option value="BR">Brasil (BR)</option>
                                 </select>
                             </div>
                         </div>
@@ -394,9 +394,9 @@ export default function IntegrationsPage() {
                                 className="w-full py-3 rounded-lg bg-black border border-[#00f2ea]/50 text-white font-bold hover:bg-[#00f2ea]/20 transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,242,234,0.2)]"
                             >
                                 {isTikTokConnecting ? (
-                                    <>Connecting...</>
+                                    <>Conectando...</>
                                 ) : (
-                                    <>Simulate Connection</>
+                                    <>Simular Conexão</>
                                 )}
                             </button>
                         </div>

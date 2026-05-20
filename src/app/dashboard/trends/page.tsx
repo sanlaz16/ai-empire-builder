@@ -55,7 +55,17 @@ export default function TrendsPage() {
         if (label === 'Exploding') return 'text-red-500 bg-red-500/10 border-red-500/20 shadow-[0_0_10px_rgba(239,68,68,0.3)] animate-pulse';
         if (label === 'Hot') return 'text-orange-500 bg-orange-500/10 border-orange-500/20';
         if (label === 'Rising') return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
-        return 'text-gray-400 bg-gray-500/10 border-gray-500/20';
+        return 'text-gray-400 bg-gray-500/10 border-gray-500/20'; // Stable
+    };
+
+    const getTrendLabel = (label: string) => {
+        const map: Record<string, string> = {
+            'Exploding': 'Explodindo',
+            'Hot': 'Quente',
+            'Rising': 'Em Alta',
+            'Stable': 'Estável',
+        };
+        return map[label] ?? label;
     };
 
     return (
@@ -67,10 +77,10 @@ export default function TrendsPage() {
                     <Zap className="w-8 h-8 text-primary animate-pulse" />
                 </div>
                 <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-purple-500 mb-4">
-                    Viral Trend Radar
+                    Radar de Tendências Virais
                 </h1>
                 <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-                    Real-time AI analysis of products about to <span className="text-white font-bold">explode</span> on TikTok.
+                    Análise de IA em tempo real de produtos prestes a <span className="text-white font-bold">explodir</span> no TikTok.
                 </p>
             </div>
 
@@ -91,7 +101,7 @@ export default function TrendsPage() {
 
                             {/* TREND BADGE */}
                             <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold border uppercase tracking-wider flex items-center gap-1.5 ${getTrendColor(product.trendLabel)}`}>
-                                <Flame className="w-3 h-3" /> {product.trendLabel}
+                                <Flame className="w-3 h-3" /> {getTrendLabel(product.trendLabel)}
                             </div>
 
                             <div className="mt-12 mb-4">
@@ -104,19 +114,19 @@ export default function TrendsPage() {
 
                             <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-auto">
                                 <div>
-                                    <div className="text-[10px] text-gray-500 uppercase font-bold">Price</div>
+                                    <div className="text-[10px] text-gray-500 uppercase font-bold">Preço</div>
                                     <div className="text-green-400 font-mono font-bold">${product.sellingPrice}</div>
                                 </div>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={() => openThumbnailModal(product)}
                                         className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-all"
-                                        title="Generate AI Thumbnail"
+                                        title="Gerar Miniatura com IA"
                                     >
                                         <ImageIcon className="w-5 h-5" />
                                     </button>
                                     <button className="px-4 py-2 rounded-lg bg-primary text-black font-bold hover:bg-primary/80 transition-all flex items-center gap-2">
-                                        <ShoppingBag className="w-4 h-4" /> Add
+                                        <ShoppingBag className="w-4 h-4" /> Adicionar
                                     </button>
                                 </div>
                             </div>
@@ -138,12 +148,12 @@ export default function TrendsPage() {
 
                         {/* LEFT: Controls */}
                         <div className="p-8 w-full md:w-1/3 border-r border-white/10 bg-black/20 flex flex-col">
-                            <h2 className="text-2xl font-bold text-white mb-1">AI Thumbnail</h2>
+                            <h2 className="text-2xl font-bold text-white mb-1">Miniatura com IA</h2>
                             <p className="text-sm text-gray-400 mb-6">{selectedProduct.name}</p>
 
                             <div className="space-y-6 flex-grow">
                                 <div>
-                                    <label className="text-xs font-bold text-gray-500 uppercase mb-3 block">Choose Style</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase mb-3 block">Escolher Estilo</label>
                                     <div className="grid grid-cols-2 gap-3">
                                         {['neon', 'clean', 'luxury', 'viral'].map((style) => (
                                             <button
@@ -170,7 +180,7 @@ export default function TrendsPage() {
                                     <RefreshCw className="w-5 h-5 animate-spin" />
                                 ) : (
                                     <>
-                                        <Zap className="w-5 h-5 fill-current" /> Generate Cover
+                                        <Zap className="w-5 h-5 fill-current" /> Gerar Capa
                                     </>
                                 )}
                             </button>
@@ -193,7 +203,7 @@ export default function TrendsPage() {
                                             <Download className="w-5 h-5" />
                                         </button>
                                         <button className="px-6 py-3 rounded-full bg-[#00f2ea] text-black font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(0,242,234,0.4)]">
-                                            Use for TikTok
+                                            Usar no TikTok
                                         </button>
                                     </div>
                                 </div>
@@ -202,8 +212,8 @@ export default function TrendsPage() {
                                     <div className="w-24 h-24 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6 animate-pulse">
                                         <ImageIcon className="w-10 h-10 opacity-50" />
                                     </div>
-                                    <h3 className="text-xl font-bold mb-2">Ready to Generate</h3>
-                                    <p>Select a style and click Generate to create a scroll-stopping TikTok cover.</p>
+                                    <h3 className="text-xl font-bold mb-2">Pronto para Gerar</h3>
+                                    <p>Selecione um estilo e clique em Gerar Capa para criar uma miniatura irresistível para o TikTok.</p>
                                 </div>
                             )}
                         </div>

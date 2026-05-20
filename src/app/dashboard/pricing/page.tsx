@@ -23,7 +23,7 @@ export default function PricingPage() {
             if (data.url) {
                 window.location.href = data.url;
             } else {
-                alert(data.error || 'Failed to start checkout');
+                alert(data.error || 'Falha ao iniciar o checkout');
             }
         } catch (error) {
             console.error('Upgrade failed', error);
@@ -36,9 +36,9 @@ export default function PricingPage() {
         <div className="p-8 max-w-7xl mx-auto min-h-screen bg-[#050505]">
             <div className="text-center mb-20 relative">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/20 blur-[120px] rounded-full -z-10" />
-                <h1 className="text-7xl font-black text-white uppercase tracking-tighter mb-6">Choose Your Plan</h1>
+                <h1 className="text-7xl font-black text-white uppercase tracking-tighter mb-6">Escolha seu Plano</h1>
                 <p className="text-xl text-gray-500 font-bold max-w-2xl mx-auto">
-                    Select the perfect plan to grow your dropshipping empire. Scale from a side-hustle to a $100k/mo operation.
+                    Selecione o plano ideal para crescer seu império de dropshipping. Escale de uma renda extra para uma operação de R$500k/mês.
                 </p>
             </div>
 
@@ -54,7 +54,7 @@ export default function PricingPage() {
                         >
                             {plan.highlighted && (
                                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-black px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl">
-                                    Most Popular
+                                    Mais Popular
                                 </div>
                             )}
 
@@ -65,7 +65,7 @@ export default function PricingPage() {
                                 <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">{plan.name}</h3>
                                 <div className="flex items-baseline justify-center gap-1">
                                     <span className="text-5xl font-black text-white">{plan.priceDisplay}</span>
-                                    <span className="text-gray-500 font-bold uppercase text-xs tracking-widest">/mo</span>
+                                    <span className="text-gray-500 font-bold uppercase text-xs tracking-widest">/mês</span>
                                 </div>
                             </div>
 
@@ -95,10 +95,10 @@ export default function PricingPage() {
                                 {isProcessing === plan.id ? (
                                     <Loader2 className="w-5 h-5 animate-spin" />
                                 ) : isCurrent ? (
-                                    'Current Plan'
+                                    'Plano Atual'
                                 ) : (
                                     <>
-                                        Upgrade Now <ArrowRight className="w-5 h-5" />
+                                        Fazer Upgrade <ArrowRight className="w-5 h-5" />
                                     </>
                                 )}
                             </button>
@@ -109,9 +109,9 @@ export default function PricingPage() {
 
             <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 p-12 glass-card border-white/5 rounded-[3rem]">
                 {[
-                    { title: "Secure Checkout", desc: "Enterprise-grade encryption via Stripe & Pagarme", icon: ShieldCheck },
-                    { title: "Global Payments", desc: "Pay with Credit Card, Pix, or Local payment methods", icon: Globe },
-                    { title: "Cancel Anytime", desc: "No long-term contracts. Manage via billing portal", icon: RefreshCw }
+                    { title: "Pagamento Seguro", desc: "Criptografia de nível empresarial via Stripe & Pagarme", icon: ShieldCheck },
+                    { title: "Pagamentos Globais", desc: "Pague com Cartão de Crédito, Pix ou métodos locais", icon: Globe },
+                    { title: "Cancele Quando Quiser", desc: "Sem contratos de longo prazo. Gerencie pelo portal de cobrança", icon: RefreshCw }
                 ].map((item, i) => (
                     <div key={i} className="flex gap-6 items-start">
                         <div className="p-3 rounded-xl bg-white/5 border border-white/10">

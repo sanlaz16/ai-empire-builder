@@ -66,7 +66,7 @@ export default function Sidebar() {
                                 ? 'bg-purple-500/20 text-purple-400 border-purple-500/30'
                                 : 'bg-gray-500/10 text-gray-500 border-white/10'
                             }`}>
-                            {plan === 'elite' ? 'ELITE' : plan.toUpperCase()} PLAN
+                            {plan === 'elite' ? 'ELITE' : plan.toUpperCase()} PLANO
                         </div>
                         {!isPro && (
                             <Link href="/dashboard/pricing" className="text-[10px] font-black text-primary hover:underline uppercase tracking-tighter">
@@ -94,7 +94,7 @@ export default function Sidebar() {
                             <Icon className={`w-5 h-5 transition-transform group-hover:scale-110 shrink-0 ${isActive ? 'text-primary' : 'text-gray-500 group-hover:text-white'}`} />
                             <span className="text-sm">{link.name}</span>
                             {link.href === '/dashboard/ad-generator' && (
-                                <span className="ml-auto text-[8px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-black uppercase tracking-wider border border-primary/20">NEW</span>
+                                <span className="ml-auto text-[8px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-black uppercase tracking-wider border border-primary/20">NOVO</span>
                             )}
                         </Link>
                     );
