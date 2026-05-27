@@ -5,36 +5,36 @@ import { ChevronDown, MessageCircleQuestion } from 'lucide-react';
 
 const FAQS = [
     { 
-        q: 'What is EmpireBuilder AI?', 
-        a: 'EmpireBuilder AI is a platform that helps you create and grow an ecommerce store using artificial intelligence.' 
+        q: 'O que é o EmpireBuilder IA?', 
+        a: 'O EmpireBuilder IA é uma plataforma que ajuda você a criar e crescer uma loja de e-commerce usando inteligência artificial.' 
     },
     { 
-        q: 'Do I need experience with ecommerce?', 
-        a: 'No. The platform is built for beginners and guides you through the process.' 
+        q: 'Preciso de experiência com e-commerce?', 
+        a: 'Não. A plataforma é desenvolvida para iniciantes e te orienta durante todo o processo.' 
     },
     { 
-        q: 'Do I need coding skills?', 
-        a: 'No coding is required to use EmpireBuilder AI.' 
+        q: 'Preciso saber programar?', 
+        a: 'Nenhum conhecimento de código é necessário para usar o EmpireBuilder IA.' 
     },
     { 
-        q: 'How do products get into my store?', 
-        a: 'You connect your ecommerce stack and import products, then EmpireBuilder helps you optimize and manage them.' 
+        q: 'Como os produtos vão parar na minha loja?', 
+        a: 'Você conecta sua plataforma de e-commerce e importa os produtos, e o EmpireBuilder te ajuda a otimizar e gerenciá-los.' 
     },
     { 
-        q: 'Do you offer a free trial?', 
-        a: 'Yes. Users can start with a free trial before subscribing.' 
+        q: 'Vocês oferecem teste grátis?', 
+        a: 'Sim. Você pode começar com um teste gratuito antes de assinar.' 
     },
     { 
-        q: 'Can I use it on mobile?', 
-        a: 'Yes. The platform works on mobile browsers, and mobile apps are planned after beta.' 
+        q: 'Posso usar no celular?', 
+        a: 'Sim. A plataforma funciona em navegadores móveis, e aplicativos para celular estão planejados após o beta.' 
     },
     { 
-        q: 'Is payment secure?', 
-        a: 'Yes. Payments are processed through secure providers like Stripe and Pagar.me.' 
+        q: 'O pagamento é seguro?', 
+        a: 'Sim. Os pagamentos são processados através de provedores seguros como Stripe e Pagar.me.' 
     },
     { 
-        q: 'Is this only for dropshipping?', 
-        a: 'No. It is built for ecommerce store creation and optimization, especially helpful for beginners and product-based businesses.' 
+        q: 'Isso é apenas para dropshipping?', 
+        a: 'Não. É construído para criação e otimização de e-commerce em geral, sendo especialmente útil para iniciantes e negócios de produtos físicos.' 
     },
 ];
 
@@ -49,10 +49,10 @@ export function FaqSection() {
                         <MessageCircleQuestion className="w-6 h-6 text-primary" />
                     </div>
                     <h2 className="text-4xl font-black text-white tracking-tighter sm:text-5xl mb-4 uppercase">
-                        Frequently Asked Questions
+                        Perguntas Frequentes
                     </h2>
                     <p className="text-gray-500 font-bold">
-                        Everything you need to know about the product and billing.
+                        Tudo que você precisa saber sobre o produto e faturamento.
                     </p>
                 </div>
 
