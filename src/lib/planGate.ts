@@ -3,9 +3,9 @@
  * Maps plan levels to features and limits.
  * 
  * Plans (BRL):
- *   free   → R$ 0      (beta access, limited)
- *   pro    → R$ 49,99  (advanced AI, 10 ads/day)
- *   elite  → R$ 149,99 (full unlock, unlimited)
+ *   free   → R$ 19      (beta access, limited)
+ *   pro    → R$ 49      (advanced AI, 3 ads/day)
+ *   elite  → R$ 177     (full unlock, 10 ads/day)
  */
 
 export type PlanLevel = 'free' | 'pro' | 'elite';
@@ -25,7 +25,7 @@ export type FeatureKey =
 /** How many AI ads a plan can generate per session */
 export const AD_LIMIT: Record<PlanLevel, number> = {
     free: 3,
-    pro: 10,
+    pro: 3,
     elite: 10,
 };
 

@@ -2,9 +2,9 @@
  * Plan definitions — single source of truth for EmpireBuilder SaaS.
  * 
  * Beta launch pricing (BRL):
- *   Inicial   → R$ 19,99/mês  (beta entry)
- *   Crescimento → R$ 49,99/mês (most popular)
- *   Império   → R$ 149,99/mês (full power)
+ *   Inicial   → R$ 19/mês
+ *   Crescimento → R$ 49/mês
+ *   Império   → R$ 177/mês
  */
 
 export type PlanId = 'free' | 'pro' | 'elite';
@@ -29,14 +29,14 @@ export const PLANS: Plan[] = [
     {
         id: 'free',
         name: 'Inicial',
-        description: 'Para explorar a plataforma durante o beta',
-        priceMonthly: 19.99,
-        priceDisplay: 'R$ 19,99',
+        description: 'Constrói sua loja e escolhe produtos para o seu nicho',
+        priceMonthly: 19,
+        priceDisplay: 'R$ 19',
         stripePriceId: '',
         features: [
+            'Construtor de Loja IA',
+            'Escolha de produtos para seu nicho',
             '3 anúncios por geração',
-            '2 análises de loja por dia',
-            'Acesso ao Construtor de Loja IA',
             'Busca de produtos básica',
             'Acesso beta completo',
         ],
@@ -49,21 +49,21 @@ export const PLANS: Plan[] = [
     {
         id: 'pro',
         name: 'Crescimento',
-        description: 'Para quem quer lançar e escalar',
-        priceMonthly: 49.99,
-        priceDisplay: 'R$ 49,99',
+        description: 'Cria sua loja com mais poder de IA e anúncios para até 3 produtos da página',
+        priceMonthly: 49,
+        priceDisplay: 'R$ 49',
         stripePriceId: process.env.STRIPE_PRO_PRICE_ID || '',
         highlighted: true,
         features: [
-            '10 anúncios por geração',
-            '20 análises de loja por dia',
+            'Tudo no plano Inicial',
+            'Mais poder de IA (Gerações mais rápidas)',
+            'Anúncios com IA para até 3 produtos',
             'Construtor de Loja IA avançado',
             'Importação Shopify',
-            'Otimização com IA',
             'Suporte prioritário',
         ],
         limits: {
-            adsPerSession: 10,
+            adsPerSession: 3,
             aiBuildsPerDay: 20,
             productsImport: 100,
         },
@@ -71,18 +71,18 @@ export const PLANS: Plan[] = [
     {
         id: 'elite',
         name: 'Império',
-        description: 'Tudo desbloqueado para escalar',
-        priceMonthly: 149.99,
-        priceDisplay: 'R$ 149,99',
+        description: 'Páginas ultra premium, velocidade máxima e comercial com IA para até 10 produtos',
+        priceMonthly: 177,
+        priceDisplay: 'R$ 177',
         stripePriceId: process.env.STRIPE_ELITE_PRICE_ID || '',
         features: [
             'Tudo no plano Crescimento',
+            'Páginas com design Ultra Premium',
+            'Processamento e carregamento mais rápidos',
+            'Comercial com IA para até 10 produtos',
             'Anúncios ilimitados',
-            'Análises ilimitadas',
-            'Export TikTok Shop',
-            'Bônus de indicação',
+            'Exportação TikTok Shop',
             'Suporte VIP',
-            'Badge Império exclusivo',
         ],
         limits: {
             adsPerSession: 10,

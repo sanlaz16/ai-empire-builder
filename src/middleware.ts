@@ -22,27 +22,37 @@ export async function middleware(request: NextRequest) {
         request: { headers: request.headers },
     });
 
-    const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-            cookies: {
-                get(name: string) {
-                    return request.cookies.get(name)?.value;
-                },
-                set(name: string, value: string, options: CookieOptions) {
-                    request.cookies.set({ name, value, ...options });
-                    response = NextResponse.next({ request: { headers: request.headers } });
-                    response.cookies.set({ name, value, ...options });
-                },
-                remove(name: string, options: CookieOptions) {
-                    request.cookies.set({ name, value: '', ...options });
-                    response = NextResponse.next({ request: { headers: request.headers } });
-                    response.cookies.set({ name, value: '', ...options });
-                },
-            },
+    let supabase;
+    try {
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+            throw new Error('Missing Supabase environment variables');
         }
-    );
+        
+        supabase = createServerClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+            {
+                cookies: {
+                    get(name: string) {
+                        return request.cookies.get(name)?.value;
+                    },
+                    set(name: string, value: string, options: CookieOptions) {
+                        request.cookies.set({ name, value, ...options });
+                        response = NextResponse.next({ request: { headers: request.headers } });
+                        response.cookies.set({ name, value, ...options });
+                    },
+                    remove(name: string, options: CookieOptions) {
+                        request.cookies.set({ name, value: '', ...options });
+                        response = NextResponse.next({ request: { headers: request.headers } });
+                        response.cookies.set({ name, value: '', ...options });
+                    },
+                },
+            }
+        );
+    } catch (e) {
+        console.error('Middleware: Failed to initialize Supabase client:', e);
+        // If client fails to initialize, we leave supabase undefined so user remains null
+    }
 
     // Check for dev bypass cookie
     const isDevBypass = request.cookies.get('sb-dev-bypass')?.value === 'true';
@@ -60,8 +70,10 @@ export async function middleware(request: NextRequest) {
 
     let user = null;
     try {
-        const { data: { user: supabaseUser } } = await supabase.auth.getUser();
-        user = supabaseUser;
+        if (supabase) {
+            const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+            user = supabaseUser;
+        }
     } catch (e) {
         console.error('Middleware: Failed to reach Supabase Auth:', e);
     }
@@ -81,7 +93,7 @@ export async function middleware(request: NextRequest) {
         const isOnboardingPath = ONBOARDING_PATHS.some(p => pathname.startsWith(p));
         if (!isOnboardingPath && !pathname.startsWith('/api')) {
             try {
-                const { data: profile } = await supabase
+                const { data: profile } = await supabase!
                     .from('profiles')
                     .select('onboarding_completed')
                     .eq('id', user.id)
@@ -100,7 +112,7 @@ export async function middleware(request: NextRequest) {
         // Exclude billing page from the gate to avoid redirect loops
         if (pathname !== '/dashboard/billing') {
             try {
-                const { data: subscription, error: subError } = await supabase
+                const { data: subscription, error: subError } = await supabase!
                     .from('subscriptions')
                     .select('status')
                     .eq('user_id', user.id)
