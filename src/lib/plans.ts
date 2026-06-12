@@ -4,7 +4,7 @@
  * Beta launch pricing (BRL):
  *   Inicial   → R$ 19/mês
  *   Crescimento → R$ 49/mês
- *   Império   → R$ 177/mês
+ *   Império   → R$ 179/mês
  */
 
 export type PlanId = 'free' | 'pro' | 'elite';
@@ -72,8 +72,8 @@ export const PLANS: Plan[] = [
         id: 'elite',
         name: 'Império',
         description: 'Páginas ultra premium, velocidade máxima e comercial com IA para até 10 produtos',
-        priceMonthly: 177,
-        priceDisplay: 'R$ 177',
+        priceMonthly: 179,
+        priceDisplay: 'R$ 179',
         stripePriceId: process.env.STRIPE_ELITE_PRICE_ID || '',
         features: [
             'Tudo no plano Crescimento',

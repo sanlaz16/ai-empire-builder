@@ -5,7 +5,7 @@
  * Plans (BRL):
  *   free   → R$ 19      (beta access, limited)
  *   pro    → R$ 49      (advanced AI, 3 ads/day)
- *   elite  → R$ 177     (full unlock, 10 ads/day)
+ *   elite  → R$ 179     (full unlock, 10 ads/day)
  */
 
 export type PlanLevel = 'free' | 'pro' | 'elite';
