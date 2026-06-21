@@ -1,96 +1,109 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-// Routes that require authentication
-const PROTECTED_PATHS = ['/dashboard', '/admin', '/onboarding'];
-// Routes that should redirect to dashboard if already authed
-const AUTH_PATHS = ['/signin', '/signup'];
-// Routes that are fully public — no auth check needed
-const PUBLIC_PATHS = ['/', '/reset-password', '/privacy-policy', '/terms-of-service', '/pricing', '/launch', '/vip-demo'];
+/**
+ * LIGHTWEIGHT MIDDLEWARE — Zero external network calls, zero heavy SDK imports.
+ *
+ * Root cause of 504 MIDDLEWARE_INVOCATION_TIMEOUT:
+ *   • @supabase/ssr was imported here, making its entire bundle run on the
+ *     Vercel Edge Runtime on EVERY request. Even with getSession() (no network
+ *     call), the bundle initialization alone exceeded Edge timeout limits.
+ *
+ * Solution:
+ *   • Remove ALL Supabase imports from middleware.
+ *   • Determine auth state by checking whether a Supabase session cookie exists
+ *     (raw cookie read — pure synchronous, zero latency).
+ *   • Real auth verification (signature check, expiry, DB lookup) stays in
+ *     page-level Server Components / Route Handlers where it belongs.
+ */
 
-export async function middleware(request: NextRequest) {
+// ─── Route Definitions ────────────────────────────────────────────────────────
+
+/** Fully public — skip middleware entirely, render immediately. */
+const PUBLIC_PREFIXES = [
+    '/',
+    '/pricing',
+    '/launch',
+    '/vip-demo',
+    '/privacy-policy',
+    '/terms-of-service',
+    '/reset-password',
+    '/store',
+];
+
+/** Only accessible when logged out — redirect to dashboard if session found. */
+const AUTH_ONLY_PREFIXES = ['/signin', '/signup'];
+
+/** Must be logged in — redirect to signin if no session cookie found. */
+const PROTECTED_PREFIXES = ['/dashboard', '/admin', '/onboarding'];
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/**
+ * Returns true if a Supabase session cookie is present.
+ * Supabase stores the session in cookies named:
+ *   sb-<project-ref>-auth-token   (new SDK)
+ *   supabase-auth-token            (legacy)
+ * We just check for the presence of any sb-*-auth-token cookie — no decoding,
+ * no verification. Pages do real verification server-side.
+ */
+function hasSessionCookie(request: NextRequest): boolean {
+    for (const [name] of request.cookies) {
+        if (name.startsWith('sb-') && name.endsWith('-auth-token')) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// ─── Middleware ────────────────────────────────────────────────────────────────
+
+export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    // Fully public routes — skip all auth checks
-    if (PUBLIC_PATHS.some(p => pathname.startsWith(p))) {
+    // 1. Fully public routes — pass through immediately, zero processing.
+    if (PUBLIC_PREFIXES.some(p => pathname === p || (p !== '/' && pathname.startsWith(p)))) {
         return NextResponse.next();
     }
 
-    let response = NextResponse.next({
-        request: { headers: request.headers },
-    });
-
-    // Safety: skip if Supabase env vars are missing
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-        console.error('Middleware: Missing Supabase environment variables');
-        return response;
+    // 2. Static assets & API routes — always pass through.
+    if (pathname.startsWith('/api/') || pathname.startsWith('/_next/')) {
+        return NextResponse.next();
     }
 
-    const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-        {
-            cookies: {
-                get(name: string) {
-                    return request.cookies.get(name)?.value;
-                },
-                set(name: string, value: string, options: CookieOptions) {
-                    request.cookies.set({ name, value, ...options });
-                    response = NextResponse.next({ request: { headers: request.headers } });
-                    response.cookies.set({ name, value, ...options });
-                },
-                remove(name: string, options: CookieOptions) {
-                    request.cookies.set({ name, value: '', ...options });
-                    response = NextResponse.next({ request: { headers: request.headers } });
-                    response.cookies.set({ name, value: '', ...options });
-                },
-            },
-        }
-    );
+    const hasSession = hasSessionCookie(request);
 
-    // Check for dev bypass cookie (dev only)
-    const isDevBypass = request.cookies.get('sb-dev-bypass')?.value === 'true';
-    if (isDevBypass && process.env.NODE_ENV === 'development') {
-        if (AUTH_PATHS.some(p => pathname.startsWith(p))) {
-            return NextResponse.redirect(new URL('/dashboard', request.url));
-        }
-        return response;
-    }
-
-    // Single fast auth check — reads JWT cookie locally, NO network request
-    // (getUser() makes a live HTTP call to Supabase which causes middleware timeouts;
-    //  getSession() is safe for routing decisions in middleware)
-    let user = null;
-    try {
-        const { data: { session } } = await supabase.auth.getSession();
-        user = session?.user ?? null;
-    } catch (e) {
-        console.error('Middleware: Failed to read session:', e);
-        // On error, allow through — pages handle their own auth guards
-        return response;
-    }
-
-    // Redirect unauthenticated users away from protected routes
-    const isProtected = PROTECTED_PATHS.some(p => pathname.startsWith(p));
-    if (isProtected && !user) {
-        const redirectUrl = new URL('/signin', request.url);
-        redirectUrl.searchParams.set('redirect', pathname);
-        return NextResponse.redirect(redirectUrl);
-    }
-
-    // Redirect already-logged-in users away from auth pages
-    if (AUTH_PATHS.some(p => pathname.startsWith(p))) {
+    // 3. Auth-only routes (signin/signup) — redirect logged-in users to dashboard.
+    if (AUTH_ONLY_PREFIXES.some(p => pathname.startsWith(p))) {
         const loggedOut = request.nextUrl.searchParams.get('logged_out') === '1';
-        if (user && !loggedOut) {
+        if (hasSession && !loggedOut) {
             return NextResponse.redirect(new URL('/dashboard', request.url));
         }
+        return NextResponse.next();
     }
 
-    return response;
+    // 4. Protected routes — redirect logged-out users to signin.
+    if (PROTECTED_PREFIXES.some(p => pathname.startsWith(p))) {
+        if (!hasSession) {
+            const redirectUrl = new URL('/signin', request.url);
+            redirectUrl.searchParams.set('redirect', pathname);
+            return NextResponse.redirect(redirectUrl);
+        }
+        return NextResponse.next();
+    }
+
+    // 5. Everything else — pass through.
+    return NextResponse.next();
 }
 
 export const config = {
     matcher: [
-        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+        /*
+         * Match all request paths EXCEPT:
+         * - _next/static  (static files)
+         * - _next/image   (image optimization)
+         * - favicon.ico
+         * - public image/font files
+         */
+        '/((?!_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|woff|woff2|ttf|otf)$).*)',
     ],
 };
