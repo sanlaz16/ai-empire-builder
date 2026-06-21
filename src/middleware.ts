@@ -6,7 +6,7 @@ const PROTECTED_PATHS = ['/dashboard', '/admin', '/onboarding'];
 // Routes that should redirect to dashboard if already authed
 const AUTH_PATHS = ['/signin', '/signup'];
 // Routes that are fully public — no auth check needed
-const PUBLIC_PATHS = ['/reset-password', '/privacy-policy', '/terms-of-service', '/pricing'];
+const PUBLIC_PATHS = ['/', '/reset-password', '/privacy-policy', '/terms-of-service', '/pricing', '/launch', '/vip-demo'];
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -57,13 +57,15 @@ export async function middleware(request: NextRequest) {
         return response;
     }
 
-    // Single fast auth check — no DB queries, just reads the JWT cookie
+    // Single fast auth check — reads JWT cookie locally, NO network request
+    // (getUser() makes a live HTTP call to Supabase which causes middleware timeouts;
+    //  getSession() is safe for routing decisions in middleware)
     let user = null;
     try {
-        const { data: { user: supabaseUser } } = await supabase.auth.getUser();
-        user = supabaseUser;
+        const { data: { session } } = await supabase.auth.getSession();
+        user = session?.user ?? null;
     } catch (e) {
-        console.error('Middleware: Failed to reach Supabase Auth:', e);
+        console.error('Middleware: Failed to read session:', e);
         // On error, allow through — pages handle their own auth guards
         return response;
     }
